@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tw-animate-css";
+@import "./fonts.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -41,6 +42,16 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* 커스텀 컬러 */
+  --color-main: #00c471;
+  --color-cancel: #e53935;
+  --color-light-gray: #e0e0e0;
+  --color-dark-gray: #666;
+
+  /* 폰트 */
+  --font-bookk-bold: "BookkMyungjo_Bold", "sans-serif";
+  --font-bookk-light: "BookkMyungjo_Light", "sans-serif";
 }
 
 :root {
