@@ -12,7 +12,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     | "lg-full"
     | "full";
   variant?: "fill" | "outline";
-  color?: "rose" | "violet";
+  color?: "main" | "cancel";
   rounded?: "sm" | "md" | "lg" | "full";
   isLoading?: boolean;
   loadingText?: string;
@@ -22,7 +22,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export default function Button({
   size = "sm",
   variant = "fill",
-  color = "rose",
+  color = "main",
   rounded = "sm",
   className,
   isLoading = false,
@@ -54,17 +54,18 @@ export default function Button({
 
         // 스타일 및 컬러
         variant === "fill" &&
-          color === "rose" &&
-          "bg-rose-500 text-white hover:bg-rose-600 active:bg-rose-700",
+          color === "main" &&
+          "bg-main text-white hover:bg-main/90 active:bg-main/80", // ✅ 변경
         variant === "fill" &&
-          color === "violet" &&
-          "bg-violet-500 text-white hover:bg-violet-600 active:bg-violet-700",
+          color === "cancel" &&
+          "bg-cancel text-white hover:bg-cancel/90 active:bg-cancel/80",
+
         variant === "outline" &&
-          color === "rose" &&
-          "border border-rose-500 text-rose-500 bg-[rgba(255,255,255,0.1)] hover:bg-rose-600 hover:text-white active:bg-rose-700",
+          color === "main" &&
+          "border border-main text-main bg-[rgba(255,255,255,0.1)] hover:bg-main hover:text-white active:bg-main/80", // ✅ 변경
         variant === "outline" &&
-          color === "violet" &&
-          "border border-violet-500 text-violet-500 bg-[rgba(255,255,255,0.1)] hover:bg-violet-600 hover:text-white active:bg-violet-700",
+          color === "cancel" &&
+          "border border-cancel text-cancel bg-[rgba(255,255,255,0.1)] hover:bg-cancel hover:text-white active:bg-cancel",
 
         // disabled 스타일 (색, 투명도)
         "disabled:bg-gray-300 disabled:opacity-50 hover:disabled:bg-gray-300",
