@@ -110,7 +110,7 @@ export default function BookListPage() {
                         color="main"
                         className="text-sm"
                     >
-                        도서 추가
+                        도서 등록
                     </Button>
                 </div>
 
