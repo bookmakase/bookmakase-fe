@@ -5,27 +5,10 @@ import axios from 'axios';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 
 import Button from '@/components/ui/Button';
+import { api } from '@/constants/apiPath';
+import type { PageInfo } from '@/types/pagination';
+import type { BookItem } from '@/types/book';
 
-axios.defaults.baseURL = "http://localhost:8080";
-
-type BookItem = {
-    bookId: number;
-    title: string;
-    authors: string[];
-    isbn: string;
-    createdAt: string;
-    status: string;
-    count: number;
-    isRecommended: boolean; // ✅ 로컬 전용
-
-};
-
-type PageInfo = {
-    page: number;
-    size: number;
-    totalPages: number;
-    totalCount: number;
-};
 
 
 export default function BookListPage() {
@@ -43,10 +26,10 @@ export default function BookListPage() {
 
     const fetchBooks = async () => {
         try {
-            const res = await axios.get(`/api/v1/admin/books?page=${page}`);
+            const res = await axios.get(`${api.admin.books}?page=${page}`);
             const booksWithRecommendation = res.data.content.map((book: BookItem) => ({
                 ...book,
-                isRecommended: false, // 모든 도서 기본값 false
+                isRecommended: false,
             }));
             setBooks(booksWithRecommendation);
             setPageInfo(res.data);
@@ -55,7 +38,8 @@ export default function BookListPage() {
         }
     };
 
-    const moveToPage = (p: number) => {
+
+    const handleMoveToPage = (p: number) => {
         router.push(`/admin/books?page=${p}`);
     };
 
@@ -63,7 +47,7 @@ export default function BookListPage() {
         router.push(`/admin/edit-book/${bookId}`);
     };
 
-    const toggleRecommend = (bookId: number, current: boolean) => {
+    const handleToggleRecommend = (bookId: number, current: boolean) => {
         setBooks((prev) =>
             prev.map((book) =>
                 book.bookId === bookId
@@ -78,7 +62,7 @@ export default function BookListPage() {
         router.push("/admin/add-book");
     };
 
-    const moveToTab = (path: string) => {
+    const handleMoveToTab = (path: string) => {
         router.push(path);
     };
 
@@ -87,13 +71,13 @@ export default function BookListPage() {
             {/* 왼쪽 사이드바 */}
             <aside className="w-60 p-6 border-r flex flex-col gap-4 bg-gray-50">
                 <button
-                    onClick={() => moveToTab('/admin/books')}
+                    onClick={() => handleMoveToTab('/admin/books')}
                     className={`text-left text-lg font-semibold ${pathname === '/admin/books' ? 'text-main' : 'text-gray-700'} hover:text-main`}
                 >
                     📚 도서 관리
                 </button>
                 <button
-                    onClick={() => moveToTab('/admin/recommendations')}
+                    onClick={() => handleMoveToTab('/admin/recommendations')}
                     className={`text-left text-lg font-semibold ${pathname === '/admin/recommendation' ? 'text-main' : 'text-gray-700'} hover:text-main`}
                 >
                     🌟 추천 도서 관리
@@ -149,7 +133,7 @@ export default function BookListPage() {
                                         편집
                                     </Button>
                                     <Button
-                                        onClick={() => toggleRecommend(book.bookId, book.isRecommended)}
+                                        onClick={() => handleToggleRecommend(book.bookId, book.isRecommended)}
                                         size="md-70"
                                         color={book.isRecommended ? "cancel" : "main"}
                                     >
@@ -169,7 +153,7 @@ export default function BookListPage() {
                         {Array.from({ length: pageInfo.totalPages }, (_, i) => (
                             <Button
                                 key={i}
-                                onClick={() => moveToPage(i + 1)}
+                                onClick={() => handleMoveToPage(i + 1)}
                                 size="sm"
                                 variant={pageInfo.page === i + 1 ? "fill" : "outline"}
                                 color="main"
