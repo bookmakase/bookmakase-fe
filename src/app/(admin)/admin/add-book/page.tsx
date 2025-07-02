@@ -47,8 +47,12 @@ export default function AddBookPage() {
             });
 
             router.push('/admin/books');
-        } catch (err: any) {
-            setError(err.response?.data?.message || '도서 등록에 실패했습니다.');
+        }  catch (err: unknown) {
+            if (axios.isAxiosError(err)) {
+                setError(err.response?.data?.message || '도서 등록에 실패했습니다.');
+            } else {
+                setError('알 수 없는 오류가 발생했습니다.');
+            }
         }
     };
 
