@@ -7,10 +7,10 @@ export default function Home() {
       <Button color="cancel" variant="outline">
         버튼
       </Button>
-      <Link href={"/admin"} className="font-bookk-bold">
+      <Link href={"/admin/books"} className="font-bookk-bold">
         관리자 페이지 이동
       </Link>
-      <Link href={"/admin/add-book"}>도서 등록하기</Link>
+
       <h1>메인 홈 화면</h1>
     </main>
   );
