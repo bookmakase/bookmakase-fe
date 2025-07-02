@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-axios.defaults.baseURL = 'http://localhost:8080';
+import { api } from '@/constants/apiPath';
+
+
 
 import InputFeild from '@/components/ui/InputFeild';
 import Button from '@/components/ui/Button';
@@ -36,7 +38,7 @@ export default function AddBookPage() {
 
     const handleSubmit = async () => {
         try {
-            await axios.post('/api/v1/admin/books', {
+            await axios.post(api.admin.books, {
                 ...form,
                 authors: form.authors.split(',').map((s) => s.trim()),
                 translators: form.translators.split(',').map((s) => s.trim()),
