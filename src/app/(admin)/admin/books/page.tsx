@@ -8,6 +8,7 @@ import Button from '@/components/ui/Button';
 import { api } from '@/constants/apiPath';
 import type { PageInfo } from '@/types/pagination';
 import type { BookItem } from '@/types/book';
+import { useCallback } from 'react'; // 추가
 
 
 
@@ -20,11 +21,8 @@ export default function BookListPage() {
     const pathname = usePathname();
     const page = Number(searchParams.get("page")) || 1;
 
-    useEffect(() => {
-        fetchBooks();
-    }, [page]);
 
-    const fetchBooks = async () => {
+    const fetchBooks = useCallback(async () => {
         try {
             const res = await axios.get(`${api.admin.books}?page=${page}`);
             const booksWithRecommendation = res.data.content.map((book: BookItem) => ({
@@ -33,11 +31,18 @@ export default function BookListPage() {
             }));
             setBooks(booksWithRecommendation);
             setPageInfo(res.data);
-        } catch (err: any) {
-            setError(err.response?.data?.message || '도서 목록 불러오기에 실패했습니다.');
+        } catch (err: unknown) {
+            if (axios.isAxiosError(err)) {
+                setError(err.response?.data?.message || '도서 목록 불러오기에 실패했습니다.');
+            } else {
+                setError('알 수 없는 오류가 발생했습니다.');
+            }
         }
-    };
+    }, [page]);
 
+    useEffect(() => {
+        fetchBooks();
+    }, [fetchBooks]);
 
     const handleMoveToPage = (p: number) => {
         router.push(`/admin/books?page=${p}`);
