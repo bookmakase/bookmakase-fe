@@ -2,6 +2,7 @@ import Button from "@/components/ui/Button";
 import Link from "next/link";
 
 export default function Home() {
+
     return (
         <main className="w-full min-h-[calc(100vh-120px)] flex flex-col gap-10 justify-center items-center">
             <Button color="cancel" variant="outline">

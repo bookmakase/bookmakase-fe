@@ -4,4 +4,5 @@ export default function RecommendationBookPage() {
             <h1>추천 도서 관리</h1>
         </main>
     );
+
 }
