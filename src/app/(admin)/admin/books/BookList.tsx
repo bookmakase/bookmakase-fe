@@ -53,7 +53,89 @@ export default function BookList() {
 
     return (
         <div className="flex min-h-screen">
-            {/* ... 이전 코드 동일 ... */}
+            <aside className="w-60 p-6 border-r flex flex-col gap-4 bg-gray-50">
+                <button
+                    onClick={() => handleMoveToTab('/admin/books')}
+                    className={`text-left text-lg font-semibold ${pathname === '/admin/books' ? 'text-main' : 'text-gray-700'} hover:text-main`}
+                >
+                    📚 도서 관리
+                </button>
+                <button
+                    onClick={() => handleMoveToTab('/admin/recommendations')}
+                    className={`text-left text-lg font-semibold ${pathname === '/admin/recommendation' ? 'text-main' : 'text-gray-700'} hover:text-main`}
+                >
+                    🌟 추천 도서 관리
+                </button>
+            </aside>
+
+            <main className="flex-1 p-6">
+                <div className="flex justify-between items-center mb-4">
+                    <h1 className="text-2xl font-bold">📚 도서 관리</h1>
+                    <Button onClick={handleAddBook} size="md" color="main" className="text-sm">
+                        도서 등록
+                    </Button>
+                </div>
+
+                {error && <p style={{ color: 'var(--color-cancel)' }}>{error}</p>}
+
+                <table className="w-full table-auto border">
+                    <thead>
+                    <tr className="bg-[var(--color-light-gray)]">
+                        <th className="border px-3 py-2">ID</th>
+                        <th className="border px-3 py-2">제목</th>
+                        <th className="border px-3 py-2">저자</th>
+                        <th className="border px-3 py-2">ISBN</th>
+                        <th className="border px-3 py-2">등록일</th>
+                        <th className="border px-3 py-2">상태</th>
+                        <th className="border px-3 py-2 whitespace-nowrap">재고</th>
+                        <th className="border px-3 py-2">관리</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {books.map((book) => (
+                        <tr key={book.bookId}>
+                            <td className="border px-3 py-2 text-center">{book.bookId}</td>
+                            <td className="border px-3 py-2 whitespace-nowrap">{book.title}</td>
+                            <td className="border px-3 py-2">{book.authors.join(', ')}</td>
+                            <td className="border px-3 py-2">{book.isbn}</td>
+                            <td className="border px-3 py-2 whitespace-nowrap">{book.createdAt.split("T")[0]}</td>
+                            <td className="border px-3 py-2 whitespace-nowrap">{book.status}</td>
+                            <td className="border px-3 py-2 text-center">{book.count}</td>
+                            <td className="border px-3 py-2 whitespace-nowrap">
+                                <div className="flex gap-2 justify-center">
+                                    <Button onClick={() => handleEdit(book.bookId)} size="md-70" color="main">
+                                        편집
+                                    </Button>
+                                    <Button
+                                        onClick={() => handleToggleRecommend(book.bookId, book.isRecommended)}
+                                        size="md-70"
+                                        color={book.isRecommended ? "cancel" : "main"}
+                                    >
+                                        {book.isRecommended ? "추천 해제" : "추천"}
+                                    </Button>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+
+                {pageInfo && (
+                    <div className="flex gap-2 justify-center mt-6">
+                        {Array.from({ length: pageInfo.totalPages }, (_, i) => (
+                            <Button
+                                key={i}
+                                onClick={() => handleMoveToPage(i + 1)}
+                                size="sm"
+                                variant={pageInfo.page === i + 1 ? "fill" : "outline"}
+                                color="main"
+                            >
+                                {i + 1}
+                            </Button>
+                        ))}
+                    </div>
+                )}
+            </main>
         </div>
     );
 }
