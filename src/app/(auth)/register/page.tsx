@@ -2,6 +2,7 @@
 
 import Button from "@/components/ui/Button";
 import InputFeild from "@/components/ui/InputFeild";
+import { useRegister } from "@/hooks/mutation/useRegister";
 import { RegisterInput, registerSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -10,11 +11,14 @@ import { useForm } from "react-hook-form";
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { mutate, isPending } = useRegister();
 
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
+    getValues,
     formState: { errors, isValid },
   } = useForm<RegisterInput>({
     mode: "onChange",
@@ -23,8 +27,9 @@ export default function RegisterPage() {
 
   const emailValue = watch("email");
   const passwordValue = watch("password");
-  const confirmValue = watch("confirm");
-  const nicknameValue = watch("nickname");
+  const confirmValue = watch("confirmPassword");
+  const usernameValue = watch("username");
+  const phoneValue = watch("phone");
 
   const getStatus = (
     value: string,
@@ -36,8 +41,24 @@ export default function RegisterPage() {
   };
 
   const handleClickRegister = (data: RegisterInput) => {
-    console.log("회원가입 : ", data);
-    router.push("/login");
+    mutate(
+      {
+        email: data.email,
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+        username: data.username,
+        phone: data.phone,
+      },
+      {
+        onSuccess: () => {
+          alert("회원가입 완료! 로그인 페이지로 이동합니다.");
+          router.push("/login");
+        },
+        onError: () => {
+          alert("회원가입 실패... 다시 시도해 주세요.");
+        },
+      }
+    );
   };
 
   return (
@@ -85,11 +106,13 @@ export default function RegisterPage() {
             labelText="비밀번호 확인"
             type="password"
             placeholder="********"
-            validationStatus={getStatus(confirmValue, errors.confirm)}
-            {...register("confirm")}
+            validationStatus={getStatus(confirmValue, errors.confirmPassword)}
+            {...register("confirmPassword")}
           />
-          {errors.confirm && confirmValue && (
-            <p className="text-sm text-red-500">{errors.confirm.message}</p>
+          {errors.confirmPassword && confirmValue && (
+            <p className="text-sm text-red-500">
+              {errors.confirmPassword.message}
+            </p>
           )}
         </div>
 
@@ -100,16 +123,41 @@ export default function RegisterPage() {
             labelText="닉네임"
             type="text"
             placeholder="새싹어린이"
-            validationStatus={getStatus(nicknameValue, errors.nickname)}
-            {...register("nickname")}
+            validationStatus={getStatus(usernameValue, errors.username)}
+            {...register("username")}
           />
-          {errors.nickname && nicknameValue && (
-            <p className="text-sm text-red-500">{errors.nickname.message}</p>
+          {errors.username && usernameValue && (
+            <p className="text-sm text-red-500">{errors.username.message}</p>
           )}
         </div>
 
-        <Button size="full" disabled={!isValid}>
-          회원가입
+        {/* 전화번호 필드 */}
+        <div>
+          <InputFeild
+            id="phone"
+            labelText="전화번호"
+            type="text"
+            placeholder="010-xxxx-xxxx"
+            validationStatus={getStatus(phoneValue, errors.phone)}
+            {...register("phone")}
+            onFocus={() => {
+              if (getValues("phone") === "") {
+                setValue("phone", "010-", { shouldDirty: true });
+              }
+            }}
+            onBlur={() => {
+              if (getValues("phone") === "010-") {
+                setValue("phone", "", { shouldDirty: true });
+              }
+            }}
+          />
+          {errors.phone && phoneValue && (
+            <p className="text-sm text-red-500">{errors.phone.message}</p>
+          )}
+        </div>
+
+        <Button size="full" disabled={!isValid || isPending}>
+          {isPending ? "처리 중..." : "회원가입"}
         </Button>
       </form>
     </div>

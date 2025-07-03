@@ -1,5 +1,6 @@
 "use client";
 
+import { GoogleIcon } from "@/components/icons/GoogleIcon";
 import Button from "@/components/ui/Button";
 import InputFeild from "@/components/ui/InputFeild";
 import { LoginInput, loginSchema } from "@/lib/validation";
@@ -7,14 +8,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { Github } from "lucide-react";
+import { KakaoIcon } from "@/components/icons/KakaoIcon";
+import { useLogin } from "@/hooks/mutation/useLogin";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { mutate, isPending } = useLogin();
+
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<LoginInput>({
     mode: "onChange",
     resolver: zodResolver(loginSchema),
@@ -33,7 +39,18 @@ export default function LoginPage() {
   };
 
   const handleClickLogin = (data: LoginInput) => {
-    console.log("로그인 : ", data);
+    mutate(
+      {
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: () => {
+          alert("로그인 완료! 메인 페이지로 이동합니다.");
+          router.push("/");
+        },
+      }
+    );
   };
 
   const handleClickMoveRegister = () => {
@@ -78,17 +95,58 @@ export default function LoginPage() {
           )}
         </div>
 
-        <Button size="full">로그인</Button>
+        <Button size="full" disabled={!isValid || isPending}>
+          {isPending ? "처리 중..." : "로그인"}
+        </Button>
         <Button
           onClick={handleClickMoveRegister}
           size="full"
           variant="outline"
-          color="violet"
+          color="main"
           type="button"
         >
           회원가입
         </Button>
       </form>
+
+      {/* 로그인, 구글 버튼 */}
+      {/* 구분선 */}
+      <div className="relative my-6 w-full">
+        <hr className="border-t border-gray-200" />
+        <span className="absolute left-1/2 -top-3 transform -translate-x-1/2 bg-white px-2 text-sm text-gray-500 whitespace-nowrap">
+          또는 소셜 계정으로 로그인
+        </span>
+      </div>
+
+      <div className="flex flex-col gap-3 w-full">
+        {/* Google */}
+
+        <button
+          aria-label="Google로 로그인"
+          className="flex gap-3 border px-6 py-3 justify-center items-center cursor-pointer shadow"
+        >
+          <GoogleIcon className="w-5 h-5" />
+          <span className="text-sm font-medium">Google로 계속하기</span>
+        </button>
+
+        {/* GitHub */}
+        <button
+          aria-label="GitHub로 로그인"
+          className="flex gap-3 border px-6 py-3 justify-center items-center cursor-pointer shadow"
+        >
+          <Github className="w-5 h-5" />
+          <span className="text-sm font-medium">GitHub로 계속하기</span>
+        </button>
+
+        {/* Kakao */}
+        <button
+          aria-label="Kakao로 로그인"
+          className="flex gap-3 border px-6 py-3 justify-center items-center cursor-pointer shadow"
+        >
+          <KakaoIcon className="w-5 h-5" />
+          <span className="text-sm font-medium">Kakao로 계속하기</span>
+        </button>
+      </div>
     </div>
   );
 }
