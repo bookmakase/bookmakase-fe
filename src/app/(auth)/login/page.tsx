@@ -86,7 +86,7 @@ export default function LoginPage() {
           onClick={handleClickMoveRegister}
           size="full"
           variant="outline"
-          color="violet"
+          color="main"
           type="button"
         >
           회원가입
