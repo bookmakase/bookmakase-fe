@@ -1,5 +1,8 @@
 export const api = {
-  auth: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/auth`,
+  auth: {
+    register: `/api/v1/auth/register`,
+    login: `/api/v1/auth/login`,
+  },
   users: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`,
   books: {},
   orders: {},

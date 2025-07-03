@@ -5,3 +5,8 @@ export interface RegisterData {
   username: string;
   phone: string;
 }
+
+export interface LoginData {
+  email: string;
+  password: string;
+}

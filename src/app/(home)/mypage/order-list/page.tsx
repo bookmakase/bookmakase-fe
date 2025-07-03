@@ -27,7 +27,7 @@ export default function OrderListPage() {
         <Button
           size="md"
           variant="outline"
-          color="violet"
+          color="cancel"
           onClick={handleClickMoveBookReview}
         >
           리뷰 작성하기
