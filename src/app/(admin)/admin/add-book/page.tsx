@@ -2,13 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import axios from 'axios';
-import { api } from '@/constants/apiPath';
+import { createBook } from '@/api/admin'; 
 import InputFeild from '@/components/ui/InputFeild';
 import Button from '@/components/ui/Button';
 
 export default function AddBookPage() {
-
     const router = useRouter();
 
     const [form, setForm] = useState({
@@ -35,20 +33,11 @@ export default function AddBookPage() {
 
     const handleSubmit = async () => {
         try {
-            await axios.post(api.admin.books, {
-                ...form,
-                authors: form.authors.split(',').map((s) => s.trim()),
-                translators: form.translators.split(',').map((s) => s.trim()),
-                price: parseInt(form.price),
-                salePrice: parseInt(form.salePrice),
-                count: parseInt(form.count),
-                publishedAt: form.publishedAt,
-            });
-
+            await createBook(form); // ✅ axios 대신 createBook 사용
             router.push('/admin/books');
-        }  catch (err: unknown) {
-            if (axios.isAxiosError(err)) {
-                setError(err.response?.data?.message || '도서 등록에 실패했습니다.');
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                setError(err.message);
             } else {
                 setError('알 수 없는 오류가 발생했습니다.');
             }
@@ -82,6 +71,5 @@ export default function AddBookPage() {
                 </Button>
             </div>
         </div>
-
     );
 }
