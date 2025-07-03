@@ -34,7 +34,7 @@ export default function Header() {
 
   return (
     <header className="w-full h-[60px] flex flex-col border-b bg-background">
-      <nav className="w-full h-full flex justify-around items-center">
+      <nav className="w-full h-full flex justify-between items-center px-32">
         <Link href="/" className="text-xl font-bold">
           BOOKMAKASE
         </Link>
