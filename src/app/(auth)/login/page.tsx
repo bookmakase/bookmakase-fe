@@ -11,6 +11,8 @@ import { useForm } from "react-hook-form";
 import { Github } from "lucide-react";
 import { KakaoIcon } from "@/components/icons/KakaoIcon";
 import { useLogin } from "@/hooks/mutation/useLogin";
+import { useAuthStore } from "@/store/auth";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -49,7 +51,9 @@ export default function LoginPage() {
           localStorage.setItem("accessToken", accessToken);
           localStorage.setItem("refreshToken", refreshToken);
 
-          alert("로그인 완료! 메인 페이지로 이동합니다.");
+          useAuthStore.getState().setLogin(true);
+
+          toast.success("로그인 완료! 메인 페이지로 이동합니다.");
           router.push("/");
         },
       }
