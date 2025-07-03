@@ -1,13 +1,6 @@
 import { api } from "@/constants/apiPath";
 import { instance } from "@/lib/axios";
-
-export interface RegisterData {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  username: string;
-  phone: string;
-}
+import type { RegisterData } from "@/types/auth";
 
 export const register = async (data: RegisterData) => {
   try {
