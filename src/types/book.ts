@@ -10,24 +10,18 @@ export interface BookItem {
     isRecommended: boolean; // ✅ 프론트 전용 필드
 }
 
-export interface PageInfo {
-    page: number;
-    size: number;
-    totalPages: number;
-    totalCount: number;
-}
-
-export interface CreateBookFormData {
+export interface BookCreateRequest {
     title: string;
     contents: string;
     isbn: string;
     publishedAt: string;
-    authors: string; // comma-separated
-    translators: string; // comma-separated
+    authors: string[]; // comma-separated
+    translators: string[]; // comma-separated
     publisher: string;
-    price: string;
-    salePrice: string;
-    count: string;
+    price: number;
+    salePrice: number;
+    count: number;
     thumbnail: string;
     status: string;
+
 }

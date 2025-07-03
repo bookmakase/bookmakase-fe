@@ -1,51 +1,38 @@
 import { instance } from "@/lib/axios";
 import { api } from "@/constants/apiPath";
-import { BookItem, PageInfo, CreateBookFormData } from "@/types/admin";
+import type { BookItem, BookCreateRequest } from '@/types/book';
+import type { Page } from '@/types/pagination';
 
 
-export const fetchBooks = async (page: number): Promise<{ content: BookItem[]; pageInfo: PageInfo }> => {
+export async function fetchBooks(
+    page: number = 0,
+    size: number = 10
+): Promise<Page<BookItem>> {
     try {
-        const response = await instance.get(`${api.admin.books}?page=${page}`);
+        const response = await instance.get<Page<BookItem>>(
+            `${api.admin.books}`,
+            {
+                params: { page, size },
+            }
+        );
         return response.data;
-    } catch (err: unknown) {
-        let message = '도서 목록 불러오기에 실패했습니다.';
-        if (
-            typeof err === 'object' &&
-            err !== null &&
-            'response' in err &&
-            typeof (err as any).response?.data?.message === 'string'
-        ) {
-            message = (err as any).response.data.message;
-        }
-
-        throw new Error(message);
+    } catch (error) {
+        console.error("도서 목록 조회 실패:", error);
+        throw error;
     }
 };
 
-
-export const createBook = async (formData: CreateBookFormData) => {
+export async function createBook(
+    data: BookCreateRequest
+): Promise<BookItem> {
     try {
-        const response = await instance.post(`${api.admin.books}`, {
-            ...formData,
-            authors: formData.authors.split(',').map((s: string) => s.trim()),
-            translators: formData.translators.split(',').map((s: string) => s.trim()),
-            price: parseInt(formData.price),
-            salePrice: parseInt(formData.salePrice),
-            count: parseInt(formData.count),
-        });
-
+        const response = await instance.post<BookItem>(
+            `${api.admin.books}`,
+            data
+        );
         return response.data;
-    }  catch (err: unknown) {
-        let message = '도서 생성에 실패했습니다.';
-        if (
-            typeof err === 'object' &&
-            err !== null &&
-            'response' in err &&
-            typeof (err as any).response?.data?.message === 'string'
-        ) {
-            message = (err as any).response.data.message;
-        }
-
-        throw new Error(message);
+    } catch (error) {
+        console.error("도서 등록 실패:", error);
+        throw error;
     }
 };

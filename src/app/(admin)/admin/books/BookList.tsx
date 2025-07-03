@@ -19,22 +19,15 @@ export default function BookList() {
     const fetchBooksData = useCallback(async () => {
         try {
             const res = await fetchBooks(page);
-            const booksWithRecommendation = res.content.map((book: BookItem) => ({
-                ...book,
-                isRecommended: false,
-            }));
-            setBooks(booksWithRecommendation);
+            setBooks(
+                res.content.map((book) => ({ ...book, isRecommended: false }))
+            );
             setPageInfo(res);
         } catch (err: unknown) {
-            if (err instanceof Error) {
-                setError(err.message);  
-            } else {
-                setError('알 수 없는 오류가 발생했습니다.');
-            }
+            const message = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';
+            setError(message);
         }
     }, [page]);
-
-
 
     useEffect(() => {
         fetchBooksData();
@@ -52,23 +45,26 @@ export default function BookList() {
     const handleAddBook = () => router.push("/admin/add-book");
     const handleMoveToTab = (path: string) => router.push(path);
 
+    const SideMenu = () => (
+        <aside className="w-60 p-6 border-r flex flex-col gap-4 bg-gray-50">
+            {[
+                { label: '📚 도서 관리', path: '/admin/books' },
+                { label: '🌟 추천 도서 관리', path: '/admin/recommendations' },
+            ].map(({ label, path }) => (
+                <button
+                    key={path}
+                    onClick={() => handleMoveToTab(path)}
+                    className={`text-left text-lg font-semibold ${pathname === path ? 'text-main' : 'text-gray-700'} hover:text-main`}
+                >
+                    {label}
+                </button>
+            ))}
+        </aside>
+    );
+
     return (
         <div className="flex min-h-screen">
-            <aside className="w-60 p-6 border-r flex flex-col gap-4 bg-gray-50">
-                <button
-                    onClick={() => handleMoveToTab('/admin/books')}
-                    className={`text-left text-lg font-semibold ${pathname === '/admin/books' ? 'text-main' : 'text-gray-700'} hover:text-main`}
-                >
-                    📚 도서 관리
-                </button>
-                <button
-                    onClick={() => handleMoveToTab('/admin/recommendations')}
-                    className={`text-left text-lg font-semibold ${pathname === '/admin/recommendation' ? 'text-main' : 'text-gray-700'} hover:text-main`}
-                >
-                    🌟 추천 도서 관리
-                </button>
-            </aside>
-
+            <SideMenu />
             <main className="flex-1 p-6">
                 <div className="flex justify-between items-center mb-4">
                     <h1 className="text-2xl font-bold">📚 도서 관리</h1>
@@ -82,14 +78,9 @@ export default function BookList() {
                 <table className="w-full table-auto border">
                     <thead>
                     <tr className="bg-[var(--color-light-gray)]">
-                        <th className="border px-3 py-2">ID</th>
-                        <th className="border px-3 py-2">제목</th>
-                        <th className="border px-3 py-2">저자</th>
-                        <th className="border px-3 py-2">ISBN</th>
-                        <th className="border px-3 py-2">등록일</th>
-                        <th className="border px-3 py-2">상태</th>
-                        <th className="border px-3 py-2 whitespace-nowrap">재고</th>
-                        <th className="border px-3 py-2">관리</th>
+                        {['ID', '제목', '저자', 'ISBN', '등록일', '상태', '재고', '관리'].map((h) => (
+                            <th key={h} className="border px-3 py-2 whitespace-nowrap">{h}</th>
+                        ))}
                     </tr>
                     </thead>
                     <tbody>
