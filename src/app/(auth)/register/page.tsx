@@ -25,6 +25,7 @@ export default function RegisterPage() {
   const passwordValue = watch("password");
   const confirmValue = watch("confirm");
   const nicknameValue = watch("nickname");
+  const phoneValue = watch("phone");
 
   const getStatus = (
     value: string,
@@ -105,6 +106,21 @@ export default function RegisterPage() {
           />
           {errors.nickname && nicknameValue && (
             <p className="text-sm text-red-500">{errors.nickname.message}</p>
+          )}
+        </div>
+
+        {/* 전화번호 필드 */}
+        <div>
+          <InputFeild
+            id="phone"
+            labelText="전화번호"
+            type="text"
+            placeholder="010-xxxx-xxxx"
+            validationStatus={getStatus(phoneValue, errors.phone)}
+            {...register("phone")}
+          />
+          {errors.phone && phoneValue && (
+            <p className="text-sm text-red-500">{errors.phone.message}</p>
           )}
         </div>
 
