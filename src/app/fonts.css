@@ -1,0 +1,11 @@
+@font-face {
+  font-family: "BookkMyungjo_Bold";
+  src: url("/fonts/BookkMyungjo_Bold.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "BookkMyungjo_Light";
+  src: url("/fonts/BookkMyungjo_Light.ttf") format("truetype");
+  font-display: swap;
+}
