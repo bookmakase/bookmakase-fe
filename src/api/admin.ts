@@ -1,9 +1,12 @@
 import { instance } from "@/lib/axios";
+import { api } from "@/constants/apiPath";
+import { BookItem, PageInfo, CreateBookFormData } from "@/types/admin";
 
-export const fetchBooks = async (page: number) => {
+
+export const fetchBooks = async (page: number): Promise<{ content: BookItem[]; pageInfo: PageInfo }> => {
     try {
-        const res = await instance.get(`/api/v1/admin/books?page=${page}`);
-        return res.data;
+        const response = await instance.get(`${api.admin.books}?page=${page}`);
+        return response.data;
     } catch (err: unknown) {
         let message = '도서 목록 불러오기에 실패했습니다.';
         if (
@@ -20,9 +23,9 @@ export const fetchBooks = async (page: number) => {
 };
 
 
-export const createBook = async (formData: any) => {
+export const createBook = async (formData: CreateBookFormData) => {
     try {
-        const response = await instance.post("/api/v1/admin/books", {
+        const response = await instance.post(`${api.admin.books}`, {
             ...formData,
             authors: formData.authors.split(',').map((s: string) => s.trim()),
             translators: formData.translators.split(',').map((s: string) => s.trim()),
@@ -33,7 +36,7 @@ export const createBook = async (formData: any) => {
 
         return response.data;
     }  catch (err: unknown) {
-        let message = '도서 목록 불러오기에 실패했습니다.';
+        let message = '도서 생성에 실패했습니다.';
         if (
             typeof err === 'object' &&
             err !== null &&
