@@ -10,14 +10,17 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Github } from "lucide-react";
 import { KakaoIcon } from "@/components/icons/KakaoIcon";
+import { useLogin } from "@/hooks/mutation/useLogin";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { mutate, isPending } = useLogin();
+
   const {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<LoginInput>({
     mode: "onChange",
     resolver: zodResolver(loginSchema),
@@ -36,7 +39,18 @@ export default function LoginPage() {
   };
 
   const handleClickLogin = (data: LoginInput) => {
-    console.log("로그인 : ", data);
+    mutate(
+      {
+        email: data.email,
+        password: data.password,
+      },
+      {
+        onSuccess: () => {
+          alert("로그인 완료! 메인 페이지로 이동합니다.");
+          router.push("/");
+        },
+      }
+    );
   };
 
   const handleClickMoveRegister = () => {
@@ -81,7 +95,9 @@ export default function LoginPage() {
           )}
         </div>
 
-        <Button size="full">로그인</Button>
+        <Button size="full" disabled={!isValid || isPending}>
+          {isPending ? "처리 중..." : "로그인"}
+        </Button>
         <Button
           onClick={handleClickMoveRegister}
           size="full"
