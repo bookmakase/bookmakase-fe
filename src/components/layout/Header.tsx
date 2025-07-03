@@ -16,7 +16,7 @@ export default function Header() {
     const refreshToken = localStorage.getItem("refreshToken");
 
     if (!refreshToken) {
-      alert("리프레쉬 토큰이 없습니다. 다시 로그인 해주세요.");
+      alert("시간이 지나 로그아웃되었습니다.");
       return;
     }
 
