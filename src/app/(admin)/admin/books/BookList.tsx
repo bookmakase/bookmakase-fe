@@ -2,9 +2,8 @@
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
-import axios from 'axios';
+import { fetchBooks } from '@/api/admin';
 import Button from '@/components/ui/Button';
-import { api } from '@/constants/apiPath';
 import type { PageInfo } from '@/types/pagination';
 import type { BookItem } from '@/types/book';
 
@@ -17,27 +16,29 @@ export default function BookList() {
     const pathname = usePathname();
     const page = Number(searchParams.get("page")) || 1;
 
-    const fetchBooks = useCallback(async () => {
+    const fetchBooksData = useCallback(async () => {
         try {
-            const res = await axios.get(`${api.admin.books}?page=${page}`);
-            const booksWithRecommendation = res.data.content.map((book: BookItem) => ({
+            const res = await fetchBooks(page);
+            const booksWithRecommendation = res.content.map((book: BookItem) => ({
                 ...book,
                 isRecommended: false,
             }));
             setBooks(booksWithRecommendation);
-            setPageInfo(res.data);
+            setPageInfo(res);
         } catch (err: unknown) {
-            if (axios.isAxiosError(err)) {
-                setError(err.response?.data?.message || '도서 목록 불러오기에 실패했습니다.');
+            if (err instanceof Error) {
+                setError(err.message);  
             } else {
                 setError('알 수 없는 오류가 발생했습니다.');
             }
         }
     }, [page]);
 
+
+
     useEffect(() => {
-        fetchBooks();
-    }, [fetchBooks]);
+        fetchBooksData();
+    }, [fetchBooksData]);
 
     const handleMoveToPage = (p: number) => router.push(`/admin/books?page=${p}`);
     const handleEdit = (bookId: number) => router.push(`/admin/edit-book/${bookId}`);

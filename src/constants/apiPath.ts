@@ -7,8 +7,8 @@ export const api = {
   books: {},
   orders: {},
   cart: {},
-  admin: {
-    books: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/books`,
+  admin: {books: `api/v1/admin/books`,
+
   },
   reviews: {
     list: (bookId: string | number) =>
