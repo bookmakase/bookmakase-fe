@@ -45,7 +45,10 @@ export default function LoginPage() {
         password: data.password,
       },
       {
-        onSuccess: () => {
+        onSuccess: ({ accessToken, refreshToken }) => {
+          localStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("refreshToken", refreshToken);
+
           alert("로그인 완료! 메인 페이지로 이동합니다.");
           router.push("/");
         },

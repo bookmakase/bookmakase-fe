@@ -1,10 +1,10 @@
-import type { AxiosError, AxiosHeaders } from "axios";
+import { api } from "@/constants/apiPath";
 import axios, { InternalAxiosRequestConfig } from "axios";
 
 // 기본 인스턴스 생성
 export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  withCredentials: true, // 서버가 쿠키로 인증할 때
+  // withCredentials: true, // 이방식 x
   timeout: 15_000,
 });
 
@@ -23,26 +23,32 @@ instance.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 // 응답 인터셉터 - 401 => 토큰 재발급 & 재시도
 instance.interceptors.response.use(
   (res) => res,
-  async (err: AxiosError) => {
-    if (err.response?.status === 401) {
-      const { data } = await axios.post(
-        "/auth/refresh",
-        {},
-        { withCredentials: true }
-      );
-
-      const newToken = data.accessToken;
-
-      const original = err.config as InternalAxiosRequestConfig;
-
-      const headers = original.headers as AxiosHeaders | undefined;
-      if (headers?.set) {
-        headers.set("Authorization", `Bearer ${newToken}`);
-      }
-
-      localStorage.setItem("accessToken", newToken);
-      return instance(original);
+  async (error) => {
+    const original = error.config;
+    if (error.response?.status !== 401 || original._retry) {
+      return Promise.reject(error);
     }
-    return Promise.reject(err);
+    original._retry = true;
+
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (!refreshToken) return Promise.reject(error);
+
+    try {
+      const { data } = await instance.post(api.auth.refreshtoken, {
+        refreshToken,
+      });
+      localStorage.setItem("accessToken", data.accessToken);
+      if (data.refreshToken)
+        localStorage.setItem("refreshToken", data.refreshToken);
+
+      instance.defaults.headers.common.Authorization = `Bearer ${data.accessToken}`;
+      original.headers.set("Authorization", `Bearer ${data.accessToken}`);
+
+      return instance(original); // 재시도
+    } catch (e) {
+      localStorage.clear();
+      window.location.href = "/login";
+      return Promise.reject(e);
+    }
   }
 );
