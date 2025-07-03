@@ -21,3 +21,15 @@ export const login = async (data: LoginData) => {
     throw error;
   }
 };
+
+export const logout = async (refreshToken: string) => {
+  try {
+    const response = await instance.post(`${api.auth.logout}`, {
+      refreshToken,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("로그아웃 실패 : ", error);
+    throw error;
+  }
+};
