@@ -3,6 +3,7 @@ import "./globals.css";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Toaster } from "react-hot-toast";
 // import { Noto_Sans_KR } from "next/font/google";
 
 // const notoSansKR = Noto_Sans_KR({
@@ -23,10 +24,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      {/* <body className={`${notoSansKR.variable} w-full min-h-sc`}> */}
       <body className={`font-bookk-light w-full min-h-sc`}>
         <QueryClientProvider client={queryClient}>
           {children}
+          <Toaster position="top-center" />
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
       </body>

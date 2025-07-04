@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -51,7 +52,7 @@ export default function RegisterPage() {
       },
       {
         onSuccess: () => {
-          alert("회원가입 완료! 로그인 페이지로 이동합니다.");
+          toast.success("회원가입 성공했습니다. 로그인 페이지로 이동합니다.");
           router.push("/login");
         },
         onError: () => {
