@@ -39,7 +39,7 @@ export default function MyPage() {
   return (
     <div className="w-full min-h-[calc(100vh-120px)] flex justify-center items-center px-2 py-10">
       <MyPageNav />
-      <div className="min-h-[calc(100vh-200px)] flex-8/12 flex flex-col px-36 py-10 gap-4">
+      <div className="min-h-[calc(100vh-200px)] flex-1/3  flex flex-col px-12 py-10 gap-4">
         {/* 내 소개 */}
         <div className="flex justify-between items-center">
           <h1 className="font-bold">소개</h1>
@@ -60,7 +60,7 @@ export default function MyPage() {
             <Button onClick={handleClickEditIntro}>수정</Button>
           )}
         </div>
-        <div className="flex-1 w-full  border-2 flex justify-center items-center">
+        <div className="flex-1 w-full  border-2 flex justify-center items-center rounded-3xl shadow">
           <textarea
             value={intro ?? ""}
             readOnly={!isEdit}
@@ -83,7 +83,7 @@ export default function MyPage() {
         </div>
 
         {/* 내정보 수정 */}
-        <div className="flex-1 w-full border-2">
+        <div className="flex-1 w-full  border-2 flex justify-center items-center rounded-3xl shadow">
           <h1>내정보 수정</h1>
         </div>
       </div>

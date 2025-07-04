@@ -5,7 +5,7 @@ import { FaRegEdit } from "react-icons/fa";
 
 export default function MyPageNav() {
   return (
-    <div className="min-h-[calc(100vh-200px)] flex flex-col  items-center flex-4/12 border-r-2 gap-16 px-2 py-20">
+    <div className="min-h-[calc(100vh-200px)] flex flex-col  items-center flex-1 border-r-2 gap-16 px-2 py-20">
       {/* 이미지 콘테이너 */}
       <div className="p-2 relative">
         <div className="relative w-[190px] h-[190px] border-2 rounded-full overflow-hidden">
