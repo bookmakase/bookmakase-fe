@@ -12,7 +12,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     | "lg-full"
     | "full";
   variant?: "fill" | "outline";
-  color?: "main" | "cancel" | "violet";
+  color?: "main" | "cancel" ;
   rounded?: "sm" | "md" | "lg" | "full";
   isLoading?: boolean;
   loadingText?: string;
