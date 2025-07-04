@@ -1,6 +1,13 @@
 import { api } from "@/constants/apiPath";
 import { instance } from "@/lib/axios";
 
+export interface userInformationUpdate {
+  currentPassword?: string;
+  newPassword?: string;
+  confirmNewPassword?: string;
+  newUsername?: string;
+}
+
 export const getMyInfo = async () => {
   try {
     const response = await instance.get(`${api.users}/me`);
@@ -17,6 +24,16 @@ export const userIntroUpdate = async (intro: string) => {
     return response.data;
   } catch (error) {
     console.error("인트로 업데이트 실패 : ", error);
+    throw error;
+  }
+};
+
+export const userInformationUpdate = async (data: userInformationUpdate) => {
+  try {
+    const response = await instance.put(`${api.users}/information`, data);
+    return response.data;
+  } catch (error) {
+    console.error("내정보 업데이트 실패 :", error);
     throw error;
   }
 };
