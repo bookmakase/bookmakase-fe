@@ -1,6 +1,7 @@
 import { api } from "@/constants/apiPath";
 import type { BookDetail } from "@/types/book";
 
+// 서버 컴포넌트에 사용
 export const fetchBookDetail = async (
   bookId: number
 ): Promise<BookDetail | null> => {
