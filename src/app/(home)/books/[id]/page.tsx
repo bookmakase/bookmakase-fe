@@ -40,7 +40,11 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
 
         {/* BookTitleAndIntro: 2영역 차지 */}
         <div className="col-span-2 flex justify-center items-center">
-          <BookTitleAndIntro />
+          <BookTitleAndIntro
+            title={book.title}
+            contents={book.contents}
+            thumbnail={book.thumbnail}
+          />
         </div>
 
         {/* StockAndPurchase: 1영역 차지 */}

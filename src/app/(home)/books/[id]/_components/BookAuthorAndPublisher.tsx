@@ -8,13 +8,13 @@ export default function BookAuthorAndPublisher({
   publisher,
 }: BookAuthorAndPublisherProps) {
   return (
-    <div>
-      <p>
-        <span className="font-bookk-bold">저자: </span>
+    <div className="space-y-2 text-sm">
+      <p className="flex items-center gap-2">
+        <span className="font-bookk-bold">저자:</span>
         <span>{authors.join(", ")}</span>
       </p>
-      <p>
-        <span className="font-bookk-bold">출판사: </span>
+      <p className="flex items-center gap-2">
+        <span className="font-bookk-bold">출판사:</span>
         <span>{publisher}</span>
       </p>
     </div>
