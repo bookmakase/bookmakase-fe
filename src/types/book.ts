@@ -13,7 +13,7 @@ export interface BookItem {
 export interface BookDetail extends BookItem {
     contents?: string;
     translators?: string[];
-    publishedAt?: string;
+    publishedAt?: string | null;
     publisher?: string;
     price?: number;
     salePrice?: number;
@@ -25,7 +25,7 @@ export interface BookCreateRequest {
     title: string;
     contents?: string;
     isbn?: string;
-    publishedAt?: string;
+    publishedAt?: string | null;
     authors?: string[]; // comma-separated
     translators?: string[]; // comma-separated
     publisher?: string;
@@ -40,7 +40,7 @@ export interface BookUpdateRequest {
     title: string;
     contents?: string;
     isbn?:string;
-    publishedAt?: string;
+    publishedAt?: string | null;
     authors?: string[]; // comma-separated
     translators?: string[]; // comma-separated
     publisher?: string;
@@ -49,4 +49,12 @@ export interface BookUpdateRequest {
     count: number;
     thumbnail?:string;
     status?: string;
+}
+export interface BookHomeResponse {
+    title: string;
+    authors?: string[]; // comma-separated
+    thumbnail?:string;
+}
+export interface BookHomeResponse {
+    latestBooks: BookHomeResponse[];
 }

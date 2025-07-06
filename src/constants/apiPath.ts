@@ -6,11 +6,15 @@ export const api = {
     refreshtoken: `/api/v1/auth/refreshtoken`,
   },
   users: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`,
-  books: {},
+  books: {
+    home: `api/v1/books/home`,
+    search: `api/v1/books/search`,
+  },
   orders: {},
   cart: {},
   admin: {
-    books: `api/v1/admin/books`,},
+    books: `api/v1/admin/books`,
+  },
   reviews: {
     list: (bookId: string | number) =>
       `${process.env.NEXT_PUBLIC_API_URL}/v1/books/${bookId}/reviews`,

@@ -37,11 +37,25 @@ export async function createBook(
     }
 };
 
-export async function updateBook(bookId: number, payload: BookUpdateRequest): Promise<void> {
-    await instance.put(`${api.admin.books}/${bookId}`, payload);
-}
+export async function updateBook(bookId: number, payload: BookUpdateRequest): Promise<BookDetail> {
+    try {
+        const res = await instance.put(`${api.admin.books}/${bookId}`, payload);
+
+        return res.data;
+    } catch (error) {
+        console.error("도서 수정 실패:", error);
+        throw error;
+    }
+};
+
 
 export async function fetchBook(bookId: number): Promise<BookDetail> {
-    const res = await instance.get(`${api.admin.books}/${bookId}`);
-    return res.data;
-}
+    try {
+        const res = await instance.get(`${api.admin.books}/${bookId}`);
+        return res.data;
+    } catch (error) {
+        console.error("도서 조회 실패:", error);
+        throw error;
+    }
+};
+

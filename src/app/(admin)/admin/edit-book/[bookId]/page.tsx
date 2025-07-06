@@ -35,7 +35,7 @@ export default function EditBookPage() {
                     title: book.title,
                     contents: book.contents || '',
                     isbn: book.isbn || '',
-                    publishedAt: book.publishedAt || '',
+                    publishedAt: book.publishedAt ? book.publishedAt.slice(0, 10) : '',
                     authors: book.authors?.join(', ') || '',
                     translators: book.translators?.join(', ') || '',
                     publisher: book.publisher || '',
@@ -60,6 +60,11 @@ export default function EditBookPage() {
 
     const handleSubmit = async () => {
         try {
+            const offsetPublishedAt =
+                form.publishedAt.trim() !== ''
+                    ? new Date(`${form.publishedAt}T00:00:00+09:00`).toISOString()
+                    : null;
+
             const payload = {
                 ...form,
                 authors: form.authors.split(',').map((s) => s.trim()),
@@ -67,8 +72,8 @@ export default function EditBookPage() {
                 price: Number(form.price),
                 salePrice: Number(form.salePrice),
                 count: Number(form.count),
+                publishedAt: offsetPublishedAt,
             };
-
             await updateBook(Number(bookId), payload);
             router.push('/admin/books');
         } catch (err: unknown) {
@@ -76,6 +81,8 @@ export default function EditBookPage() {
             setError(message);
         }
     };
+
+
 
     const fields = [
         { id: 'title', label: '제목 *' },
@@ -94,7 +101,7 @@ export default function EditBookPage() {
 
     return (
         <div className="p-10 max-w-3xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6">📗 도서 수정</h1>
+            <h1 className="text-2xl font-bold mb-6"> 도서 수정</h1>
 
             <div className="space-y-4">
                 {fields.map(({ id, label }) => (
@@ -105,6 +112,7 @@ export default function EditBookPage() {
                         name={id}
                         value={form[id as keyof typeof form]}
                         onChange={handleChange}
+                        
                     />
                 ))}
             </div>
