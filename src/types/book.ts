@@ -33,5 +33,5 @@ export interface BookDetail {
   price: number;
   salePrice: number;
   thumbnail: string;
-  status: string;
+  status: "정상판매" | "품절";
 }

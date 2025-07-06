@@ -5,8 +5,12 @@ import type { BookDetail } from "@/types/book";
 export const fetchBookDetail = async (
   bookId: number
 ): Promise<BookDetail | null> => {
+  const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}${api.books.detail(
+    bookId
+  )}`;
+
   try {
-    const response = await fetch(api.books.detail(bookId));
+    const response = await fetch(apiUrl);
 
     if (!response.ok) {
       throw new Error("도서 상세 조회 실패");

@@ -26,7 +26,7 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
   return (
     <div className="flex flex-col gap-8">
       {/* 상단 섹션: 6구역 분할 */}
-      <div className="grid grid-cols-6 gap-4 justify-items-center items-center">
+      <div className="grid grid-cols-6 gap-4 justify-items-center items-center py-16">
         {/* 좌측 1영역 비움 */}
         <div className="col-span-1"></div>
 
@@ -49,7 +49,12 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
 
         {/* StockAndPurchase: 1영역 차지 */}
         <div className="col-span-1 flex justify-center items-center">
-          <StockAndPurchase />
+          <StockAndPurchase
+            bookId={book.bookId}
+            price={book.price}
+            salePrice={book.salePrice}
+            status={book.status}
+          />
         </div>
 
         {/* 우측 1영역 비움 */}
