@@ -17,7 +17,7 @@ export const fetchBookDetail = async (
     }
 
     const data = await response.json();
-    console.log("도서 상세 데이터", data);
+    // console.log("도서 상세 데이터", data);
 
     return data;
   } catch (e) {

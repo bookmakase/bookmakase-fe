@@ -13,8 +13,7 @@ export const api = {
   cart: {},
   admin: { books: `api/v1/admin/books` },
   reviews: {
-    list: (bookId: string | number) =>
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/books/${bookId}/reviews`,
+    list: (bookId: string | number) => `/api/v1/books/${bookId}/reviews`,
   },
   comments: {},
 };

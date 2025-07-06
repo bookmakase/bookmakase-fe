@@ -60,6 +60,7 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
         {/* 우측 1영역 비움 */}
         <div className="col-span-1"></div>
       </div>
+      <hr />
 
       {/* 하단 섹션: ReviewSection */}
       <div className="grid grid-cols-6 gap-4 justify-items-center items-center">
@@ -68,7 +69,7 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
 
         {/* ReviewSection: 3영역 차지 */}
         <div className="col-span-3 flex justify-center items-center">
-          <ReviewSection />
+          <ReviewSection bookId={book.bookId} />
         </div>
 
         {/* 우측 2영역 비움 */}
