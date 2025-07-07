@@ -9,6 +9,7 @@ export const api = {
   books: {
     home: `api/v1/books/home`,
     search: `api/v1/books/search`,
+    detail: (bookId: string | number) => `/api/v1/books/${bookId}`,
   },
   orders: {
     orderList: `/api/v1`,
@@ -18,8 +19,9 @@ export const api = {
     books: `api/v1/admin/books`,
   },
   reviews: {
-    list: (bookId: string | number) =>
-      `${process.env.NEXT_PUBLIC_API_URL}/v1/books/${bookId}/reviews`,
+    list: (bookId: string | number) => `/api/v1/books/${bookId}/reviews`,
+    deleteAndRestoration: (reviewId: string | number) =>
+      `/api/v1/reviews/${reviewId}`,
   },
   comments: {},
 };
