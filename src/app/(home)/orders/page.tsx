@@ -1,12 +1,18 @@
 "use client";
 
 import { useEffect } from "react";
-import { notFound } from "next/navigation";
+// import { notFound } from "next/navigation";
 import { useOrderItemStore } from "@/store/useOrderItemStore";
+import OrderSummary from "./_components/OrderSummary";
+import CustomerInfo from "./_components/CustomerInfo";
+import OrderProductSection from "./_components/OrderProductSection";
+import PointSelection from "./_components/PointSelection";
+import PaymentSelection from "./_components/PaymentSelection";
 
 export default function OrdersPage() {
   // store
-  const { isOrderFlowActive, setOrderFlowActive } = useOrderItemStore();
+  // const { isOrderFlowActive, setOrderFlowActive } = useOrderItemStore();
+  const { setOrderFlowActive } = useOrderItemStore();
 
   /**
    * 정상적인 경로로 접근 시 정상적인 주문페이지 호출
@@ -23,13 +29,30 @@ export default function OrdersPage() {
     };
   }, [setOrderFlowActive]);
 
-  if (!isOrderFlowActive) {
-    notFound();
-  }
+  // if (!isOrderFlowActive) {
+  //   notFound();
+  // }
 
   return (
-    <main className="w-full min-h-[calc(100vh-120px)] flex flex-col justify-center items-center">
-      주문 페이지
+    <main className="w-full min-h-[calc(100vh-120px)] flex justify-center items-start bg-gray-50 py-10">
+      <div className="w-full max-w-5xl flex flex-col lg:flex-row gap-8">
+        {/* 왼쪽: 주문 정보 */}
+        <div className="flex-1 bg-white rounded-xl shadow-lg p-8 flex flex-col gap-8">
+          <CustomerInfo />
+          <hr />
+          <OrderProductSection />
+          <hr />
+          <PointSelection />
+          <hr />
+          <PaymentSelection />
+        </div>
+        {/* 오른쪽: 결제 요약 */}
+        <div className="w-full lg:w-[340px] flex-shrink-0">
+          <div className="sticky top-24 bg-white rounded-xl shadow-lg p-8">
+            <OrderSummary />
+          </div>
+        </div>
+      </div>
     </main>
   );
 }
