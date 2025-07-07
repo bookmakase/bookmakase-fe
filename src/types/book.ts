@@ -48,11 +48,13 @@ export interface BookUpdateRequest {
   thumbnail: string | null;
   status: string | null;
 }
-export interface BookHomeResponse {
+export interface BookHomeItem {
   title: string;
   authors: string[] | null; // comma-separated
   thumbnail: string | null;
 }
-export interface BookHomeResponse {
-  latestBooks: BookHomeResponse[];
+export interface BookHomeSectionResponse {
+  type: string;
+  title: string;
+  books: BookHomeItem[];
 }
