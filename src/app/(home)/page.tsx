@@ -88,6 +88,40 @@ export default function Home() {
                 )}
             </section>
 
+
+
+            {/* 추천 도서 */}
+            {recommendedBooks.length > 0 && (
+                <section className="w-full max-w-6xl px-4">
+                    <h2 className="text-xl font-bold mb-4">에디터의 북마카세</h2>
+                    <div className="overflow-x-auto">
+                        <ul className="flex gap-4 min-w-max">
+                            {recommendedBooks.map((book, i) => (
+                                <li
+                                    key={i}
+                                    className="flex-shrink-0 w-[160px] border p-2 rounded-xl shadow-sm bg-white"
+                                >
+                                    {book.thumbnail ? (
+                                        <img
+                                            src={book.thumbnail}
+                                            alt={book.title}
+                                            className="w-full h-48 object-cover rounded-md mb-2"
+                                        />
+                                    ) : (
+                                        <div className="w-full h-48 bg-gray-200 rounded-md mb-2 flex items-center justify-center text-sm text-gray-500">
+                                            이미지 없음
+                                        </div>
+                                    )}
+                                    <h3 className="font-semibold text-sm truncate">{book.title}</h3>
+                                    <p className="text-xs text-gray-500 line-clamp-1">
+                                        {book.authors?.join(", ") ?? "저자 정보 없음"}
+                                    </p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </section>
+            )}
             {/*  최신 도서 */}
             <section className="w-full max-w-6xl px-4">
                 <h2 className="text-xl font-bold mb-4">새로 등록된 책</h2>
@@ -118,40 +152,6 @@ export default function Home() {
                     </ul>
                 </div>
             </section>
-
-            {/* 추천 도서 */}
-            {recommendedBooks.length > 0 && (
-                <section className="w-full max-w-6xl px-4">
-                    <h2 className="text-xl font-bold mb-4">추천 도서</h2>
-                    <div className="overflow-x-auto">
-                        <ul className="flex gap-4 min-w-max">
-                            {recommendedBooks.map((book, i) => (
-                                <li
-                                    key={i}
-                                    className="flex-shrink-0 w-[160px] border p-2 rounded-xl shadow-sm bg-white"
-                                >
-                                    {book.thumbnail ? (
-                                        <img
-                                            src={book.thumbnail}
-                                            alt={book.title}
-                                            className="w-full h-48 object-cover rounded-md mb-2"
-                                        />
-                                    ) : (
-                                        <div className="w-full h-48 bg-gray-200 rounded-md mb-2 flex items-center justify-center text-sm text-gray-500">
-                                            이미지 없음
-                                        </div>
-                                    )}
-                                    <h3 className="font-semibold text-sm truncate">{book.title}</h3>
-                                    <p className="text-xs text-gray-500 line-clamp-1">
-                                        {book.authors?.join(", ") ?? "저자 정보 없음"}
-                                    </p>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </section>
-            )}
-
         </main>
     );
 }

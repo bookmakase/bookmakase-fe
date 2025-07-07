@@ -107,6 +107,13 @@ export default function BookList() {
                             <td className="border px-3 py-2 whitespace-nowrap">
                                 <div className="flex gap-2 justify-center">
                                     <Button
+                                        onClick={() => handleEdit(book.bookId)}
+                                        size="md-70"
+                                        color="main"
+                                    >
+                                        편집
+                                    </Button>
+                                    <Button
                                         onClick={() => handleRecommend(book.bookId)}
                                         size="md-70"
                                         color={book.recommended ? "cancel" : "main"}
@@ -116,6 +123,7 @@ export default function BookList() {
                                     </Button>
                                 </div>
                             </td>
+
                         </tr>
                     ))}
                     </tbody>

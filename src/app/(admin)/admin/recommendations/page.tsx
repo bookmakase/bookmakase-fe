@@ -6,6 +6,8 @@ import { fetchRecommendations, deleteRecommendation } from '@/api/admin';
 import type { RecommendationResponse } from '@/types/recommendation';
 import type { PageInfo } from '@/types/pagination';
 import Button from '@/components/ui/Button';
+import { getMyInfo } from "@/api/user";
+import {MyInfo} from "@/types/user"
 
 export default function RecommendationBookPage() {
     const [recommendations, setRecommendations] = useState<RecommendationResponse[]>([]);
@@ -15,30 +17,52 @@ export default function RecommendationBookPage() {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const page = Number(searchParams.get("page")) || 1;
+    const [currentUser, setCurrentUser] = useState<MyInfo | null>(null);
 
     const fetchData = useCallback(async () => {
         try {
-            const res = await fetchRecommendations(page);
-            setRecommendations(res.content);
-            setPageInfo(res);
+            const [recommendationRes, userRes] = await Promise.all([
+                fetchRecommendations(page),
+                getMyInfo(), // ✅ 여기를 fetchCurrentUser 대신 getMyInfo로
+            ]);
+
+            setRecommendations(recommendationRes.content);
+            setPageInfo(recommendationRes);
+            setCurrentUser(userRes); // ✅ 유저 정보 저장
         } catch (err) {
-            const message = err instanceof Error ? err.message : '오류가 발생했습니다';
+            const message = err instanceof Error ? err.message : "오류가 발생했습니다";
             setError(message);
         }
     }, [page]);
+
 
     useEffect(() => {
         fetchData();
     }, [fetchData]);
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: number, recUserId: number) => {
+        if (!currentUser) {
+            alert("로그인이 필요합니다.");
+            return;
+        }
+
+        if (currentUser.userId !== recUserId) {
+            alert("자신이 추천한 도서만 삭제할 수 있습니다.");
+            return;
+        }
+
+        const confirmDelete = confirm("추천을 삭제하시겠습니까?"); // ✅ 확인 안내창
+        if (!confirmDelete) return;
+
         try {
             await deleteRecommendation(id);
             fetchData();
         } catch {
-            setError('삭제 실패');
+            setError("삭제 실패");
         }
     };
+
+
 
     const handleMoveToPage = (p: number) => router.push(`/admin/recommendations?page=${p}`);
     const handleMoveToTab = (path: string) => router.push(path);
@@ -84,9 +108,14 @@ export default function RecommendationBookPage() {
                             <td className="border px-3 py-2">{rec.username}</td>
                             <td className="border px-3 py-2 whitespace-nowrap">{rec.recommendedAt.split("T")[0]}</td>
                             <td className="border px-3 py-2 text-center">
-                                <Button onClick={() => handleDelete(rec.recommendedBookId)} size="md-70" color="cancel">
+                                <Button
+                                    onClick={() => handleDelete(rec.recommendedBookId, rec.userId)}
+                                    size="md-70"
+                                    color="cancel"
+                                >
                                     삭제
                                 </Button>
+
                             </td>
                         </tr>
                     ))}
