@@ -4,151 +4,23 @@ import React, { useState } from "react";
 import MyPageNav from "../_components/MyPageNav";
 import Button from "@/components/ui/Button";
 import Image from "next/image";
-
-const bookDummy = [
-  {
-    orderId: 1,
-    bookId: 1,
-    orderDate: "2025.06.23",
-    deleveryStatus: "배송 중",
-    bookTitle: "혼모노",
-    content: "책 줄거리...",
-    bookPrice: 13000,
-    quantity: 1,
-    imgUrl: "",
-  },
-  {
-    orderId: 2,
-    bookId: 2,
-    orderDate: "2025.06.23",
-    deleveryStatus: "배송 완료",
-    bookTitle: "자바스크립트",
-    content: "책 줄거리...",
-    bookPrice: 23000,
-    quantity: 1,
-    imgUrl: "",
-  },
-  {
-    orderId: 3,
-    bookId: 2,
-    orderDate: "2025.06.23",
-    deleveryStatus: "배송 완료",
-    bookTitle: "자바스크립트",
-    content: "책 줄거리...",
-    bookPrice: 23000,
-    quantity: 1,
-    imgUrl: "",
-  },
-  {
-    orderId: 4,
-    bookId: 2,
-    orderDate: "2025.06.23",
-    deleveryStatus: "배송 완료",
-    bookTitle: "자바스크립트",
-    content: "책 줄거리...",
-    bookPrice: 23000,
-    quantity: 1,
-    imgUrl: "",
-  },
-  {
-    orderId: 5,
-    bookId: 2,
-    orderDate: "2025.06.23",
-    deleveryStatus: "배송 완료",
-    bookTitle: "자바스크립트",
-    content: "책 줄거리...",
-    bookPrice: 23000,
-    quantity: 1,
-    imgUrl: "",
-  },
-  {
-    orderId: 6,
-    bookId: 2,
-    orderDate: "2025.06.23",
-    deleveryStatus: "배송 완료",
-    bookTitle: "자바스크립트",
-    content: "책 줄거리...",
-    bookPrice: 23000,
-    quantity: 1,
-    imgUrl: "",
-  },
-  {
-    orderId: 7,
-    bookId: 2,
-    orderDate: "2025.06.23",
-    deleveryStatus: "배송 완료",
-    bookTitle: "자바스크립트",
-    content: "책 줄거리...",
-    bookPrice: 23000,
-    quantity: 1,
-    imgUrl: "",
-  },
-  {
-    orderId: 8,
-    bookId: 2,
-    orderDate: "2025.06.23",
-    deleveryStatus: "배송 완료",
-    bookTitle: "자바스크립트",
-    content: "책 줄거리...",
-    bookPrice: 23000,
-    quantity: 1,
-    imgUrl: "",
-  },
-  {
-    orderId: 9,
-    bookId: 2,
-    orderDate: "2025.06.23",
-    deleveryStatus: "배송 완료",
-    bookTitle: "자바스크립트",
-    content: "책 줄거리...",
-    bookPrice: 23000,
-    quantity: 1,
-    imgUrl: "",
-  },
-  {
-    orderId: 10,
-    bookId: 2,
-    orderDate: "2025.06.23",
-    deleveryStatus: "배송 완료",
-    bookTitle: "자바스크립트",
-    content: "책 줄거리...",
-    bookPrice: 23000,
-    quantity: 1,
-    imgUrl: "",
-  },
-  {
-    orderId: 11,
-    bookId: 2,
-    orderDate: "2025.06.23",
-    deleveryStatus: "배송 완료",
-    bookTitle: "자바스크립트",
-    content: "책 줄거리...",
-    bookPrice: 23000,
-    quantity: 1,
-    imgUrl: "",
-  },
-  {
-    orderId: 12,
-    bookId: 2,
-    orderDate: "2025.06.23",
-    deleveryStatus: "배송 완료",
-    bookTitle: "자바스크립트",
-    content: "책 줄거리...",
-    bookPrice: 23000,
-    quantity: 1,
-    imgUrl: "",
-  },
-];
+import { useMyOrderList } from "@/hooks/query/useMyOrderList";
+import { OrderItemResponse, OrderResponse } from "@/api/order";
 
 export default function OrderListPage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 3; // 한 페이지당 보여질 아이템 개수
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = bookDummy.slice(indexOfFirstItem, indexOfLastItem);
+  const { data, isPending, isError } = useMyOrderList(
+    currentPage,
+    itemsPerPage
+  );
 
-  const totalPages = Math.ceil(bookDummy.length / itemsPerPage);
+  if (isPending) return <p className="flex-1 text-center">Loading…</p>;
+  if (isError || !data)
+    return <p className="flex-1 text-center">에러가 발생했어요.</p>;
+
+  const { orders, totalPages } = data;
 
   const goPage = (p: number) => setCurrentPage(p);
   const goNext = () => setCurrentPage((p) => Math.min(p + 1, totalPages));
@@ -161,14 +33,14 @@ export default function OrderListPage() {
       {/* 구매목록 콘텐츠 */}
       <div className="min-h-[calc(100vh-200px)] flex-1/3  flex flex-col px-12 py-3 gap-4">
         {/* 아이템 */}
-        {currentItems.map((item) => (
+        {orders.map((order: OrderResponse) => (
           <section
-            key={item.orderId}
+            key={order.orderId}
             className="flex flex-col gap-2 w-full px-4 py-5 border rounded-2xl shadow"
           >
             {/* 주문일 + 상세보기 버튼 */}
             <div className="w-full flex justify-between items-center">
-              <p className="font-bold">{item.orderDate} 주문</p>
+              <p className="font-bold">{order.orderDate} 주문</p>
 
               {/* 주문 상세보기, 취소 및 환불하기 버튼 */}
               <div className="flex gap-4">
@@ -182,44 +54,51 @@ export default function OrderListPage() {
             </div>
 
             {/* 주문 디테일 정보 콘텐츠 */}
-            <div className="flex justify-between  items-center w-full px-10 py-5 border rounded-md ">
-              {/* 주문 아이템 상세 정보 */}
-              <div className="flex flex-col gap-2 cursor-pointer">
-                {/* 배송 상태 */}
-                <div className="flex gap-1 items-end">
-                  <p className="font-bold">{"배송 중"}</p>
-                  <small className="text-main">{"6월26일 도착 예정"}</small>
-                </div>
-
-                {/* 책 이미지 + 작가 + 책 줄거리 + 책 가격 + 책 수량 */}
-                <div className="flex justify-center items-center gap-4">
-                  {/* 이미지 */}
-                  <div className="w-[120px] h-[120px] overflow-hidden border shadow relative">
-                    <Image
-                      alt={item.bookTitle}
-                      src={"/images/profile-image-default.jpg"}
-                      fill
-                      priority
-                    />
+            {order.orderItems.map((book: OrderItemResponse) => (
+              <div
+                className="flex justify-between  items-center w-full px-10 py-5 border rounded-md "
+                key={book.bookId}
+              >
+                {/* 주문 아이템 상세 정보 */}
+                <div className="flex flex-col gap-2 cursor-pointer">
+                  {/* 배송 상태 */}
+                  <div className="flex gap-1 items-end">
+                    <p className="font-bold">{book.orderStatus}</p>
+                    <small className="text-main">
+                      {order.expectedArrivalDate}
+                    </small>
                   </div>
-                  {/* 책 정보 */}
-                  <div className="flex flex-col gap-2">
-                    <p>{item.bookTitle}</p>
-                    <p>{item.content}</p>
-                    {/* 수량 가격 */}
-                    <div className="flex gap-2  text-gray-400">
-                      <small>{item.bookPrice}원</small>
-                      <small>{item.quantity}개</small>
+
+                  {/* 책 이미지 + 작가 + 책 줄거리 + 책 가격 + 책 수량 */}
+                  <div className="flex justify-center items-center gap-4">
+                    {/* 이미지 */}
+                    <div className="w-[120px] h-[120px] overflow-hidden border shadow relative">
+                      <Image
+                        alt={`${book.thumbnail}`}
+                        src={book.thumbnail ?? ""}
+                        fill
+                        priority
+                      />
+                    </div>
+                    {/* 책 정보 */}
+                    <div className="flex flex-col gap-2">
+                      <p>{book.title}</p>
+                      <p>{book.contents}</p>
+                      {/* 수량 가격 */}
+                      <div className="flex gap-2  text-gray-400">
+                        <small>{book.salePrice}원</small>
+                        <small>{book.orderQuantity}개</small>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              {/* 리뷰 작성하기 버튼 */}
-              <div className="">
-                <Button size="md">리뷰 작성하기</Button>
+                {/* 리뷰 작성하기 버튼 */}
+                <div className="">
+                  <Button size="md">리뷰 작성하기</Button>
+                </div>
               </div>
-            </div>
+            ))}
           </section>
         ))}
 

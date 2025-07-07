@@ -10,7 +10,9 @@ export const api = {
     home: `api/v1/books/home`,
     search: `api/v1/books/search`,
   },
-  orders: {},
+  orders: {
+    orderList: `/api/v1`,
+  },
   cart: {},
   admin: {
     books: `api/v1/admin/books`,
