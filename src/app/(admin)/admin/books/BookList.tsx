@@ -88,7 +88,7 @@ export default function BookList() {
                         <tr key={book.bookId}>
                             <td className="border px-3 py-2 text-center">{book.bookId}</td>
                             <td className="border px-3 py-2 whitespace-nowrap">{book.title}</td>
-                            <td className="border px-3 py-2">{book.authors.join(', ')}</td>
+                            <td className="border px-3 py-2">{book.authors?.join(', ') ?? ''}</td>
                             <td className="border px-3 py-2">{book.isbn}</td>
                             <td className="border px-3 py-2 whitespace-nowrap">{book.createdAt.split("T")[0]}</td>
                             <td className="border px-3 py-2 whitespace-nowrap">{book.status}</td>
