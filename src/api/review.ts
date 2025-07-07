@@ -43,3 +43,21 @@ export const fetchReviews = async (
     return null;
   }
 };
+
+export const deleteAndRestoration = async (reviewId: number) => {
+  try {
+    const response = await instance.patch(
+      api.reviews.deleteAndRestoration(reviewId)
+    );
+
+    if (response.status !== 200) {
+      throw new Error("리뷰 삭제, 복구 실패");
+    }
+
+    console.log("리뷰 삭제, 복구 결과", response.data);
+    return response.data;
+  } catch (e) {
+    console.error("리뷰 삭제, 복구 실패", e);
+    return null;
+  }
+};

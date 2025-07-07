@@ -6,6 +6,7 @@ export interface Review {
   updatedAt: string;
   rating: number;
   content: string;
+  deleted: boolean;
 }
 
 export enum ReviewFilter {

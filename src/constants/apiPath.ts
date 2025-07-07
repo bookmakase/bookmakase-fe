@@ -14,6 +14,8 @@ export const api = {
   admin: { books: `api/v1/admin/books` },
   reviews: {
     list: (bookId: string | number) => `/api/v1/books/${bookId}/reviews`,
+    deleteAndRestoration: (reviewId: string | number) =>
+      `/api/v1/reviews/${reviewId}`,
   },
   comments: {},
 };

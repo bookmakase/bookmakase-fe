@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useGetReviews } from "@/hooks/query/useReview";
 import ReviewItem from "./ReviewItem";
 import { useAuthStore } from "@/store/auth";
+import Pagination from "@/components/ui/Pagination";
+// import { useMyIntro } from "@/hooks/query/useMyInfo";
 
 export default function ReviewSection({ bookId }: { bookId: number }) {
   // 변수
@@ -16,6 +18,7 @@ export default function ReviewSection({ bookId }: { bookId: number }) {
     isLoading,
     isError,
   } = useGetReviews(bookId, filter, page);
+  // const { data: myInfo, isLoading: infoLoading } = useMyIntro();
 
   // 스토어
   const { isLogin } = useAuthStore();
@@ -59,32 +62,6 @@ export default function ReviewSection({ bookId }: { bookId: number }) {
     setPage(pageNumber);
   };
 
-  // 페이지네이션 숫자 버튼 렌더링
-  const renderPageNumbers = () => {
-    const pageNumbers = [];
-
-    // 페이지의 시작과 끝에서는 3개씩, 가운데에서는 5개씩 보임
-    const startPage = Math.max(0, page - 2);
-    const endPage = Math.min(reviewPageResponse.totalPages - 1, page + 2);
-
-    for (let i = startPage; i <= endPage; i++) {
-      pageNumbers.push(
-        <button
-          key={i}
-          onClick={() => clickPage(i)}
-          className={`px-3 py-1 rounded ${
-            page === i
-              ? "bg-main text-white"
-              : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-100"
-          }`}
-        >
-          {i + 1}
-        </button>
-      );
-    }
-    return pageNumbers;
-  };
-
   return (
     <section className="bg-white p-6 md:p-8 w-4xl mx-auto flex flex-col gap-6">
       {/* 상단: 제목 + 필터 */}
@@ -123,21 +100,13 @@ export default function ReviewSection({ bookId }: { bookId: number }) {
 
       {/* 페이지네이션 */}
       {reviewPageResponse.totalPages > 0 && (
-        <div className="flex justify-center items-center gap-2 mt-4">
-          <button
-            className="px-3 py-1 rounded border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 disabled:opacity-50 cursor-pointer"
-            onClick={prevPage}
-          >
-            이전
-          </button>
-          {renderPageNumbers()}
-          <button
-            className="px-3 py-1 rounded border border-gray-300 bg-white text-gray-500 hover:bg-gray-100 disabled:opacity-50 cursor-pointer"
-            onClick={nextPage}
-          >
-            다음
-          </button>
-        </div>
+        <Pagination
+          currentPage={page}
+          totalPages={reviewPageResponse.totalPages}
+          clickPage={clickPage}
+          prevPage={prevPage}
+          nextPage={nextPage}
+        />
       )}
     </section>
   );
