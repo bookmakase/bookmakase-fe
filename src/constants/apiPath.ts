@@ -7,11 +7,15 @@ export const api = {
   },
   users: `${process.env.NEXT_PUBLIC_API_URL}/api/v1/users`,
   books: {
+    home: `api/v1/books/home`,
+    search: `api/v1/books/search`,
     detail: (bookId: string | number) => `/api/v1/books/${bookId}`,
   },
   orders: {},
   cart: {},
-  admin: { books: `api/v1/admin/books` },
+  admin: {
+    books: `api/v1/admin/books`,
+  },
   reviews: {
     list: (bookId: string | number) => `/api/v1/books/${bookId}/reviews`,
     deleteAndRestoration: (reviewId: string | number) =>
