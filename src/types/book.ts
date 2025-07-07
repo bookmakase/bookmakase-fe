@@ -6,7 +6,7 @@ export interface BookItem {
   createdAt: string;
   status: string | null;
   count: number;
-  isRecommended: boolean; // ✅ 프론트 전용 필드
+  recommended: boolean;
 }
 
 export interface BookDetail extends BookItem {

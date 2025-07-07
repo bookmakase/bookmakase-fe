@@ -6,7 +6,7 @@ import { fetchBooks } from '@/api/admin';
 import Button from '@/components/ui/Button';
 import type { PageInfo } from '@/types/pagination';
 import type { BookItem } from '@/types/book';
-import { createRecommendation, deleteRecommendation,  } from '@/api/admin';
+import { createRecommendation, deleteRecommendation } from '@/api/admin';
 
 
 export default function BookList() {
@@ -41,9 +41,10 @@ export default function BookList() {
             await createRecommendation(bookId);
             setBooks((prev) =>
                 prev.map((book) =>
-                    book.bookId === bookId ? { ...book, isRecommended: true } : book
+                    book.bookId === bookId ? { ...book, recommended: true } : book
                 )
             );
+
         } catch (err: unknown) {
             const message = err instanceof Error ? err.message : '추천 등록에 실패했습니다.';
             setError(message);
@@ -104,14 +105,15 @@ export default function BookList() {
                             <td className="border px-3 py-2 whitespace-nowrap">{book.status}</td>
                             <td className="border px-3 py-2 text-center">{book.count}</td>
                             <td className="border px-3 py-2 whitespace-nowrap">
-                                <div className="flex gap-2 justify-center"><Button
-                                    onClick={() => handleRecommend(book.bookId)}
-                                    size="md-70"
-                                    color={book.isRecommended ? "cancel" : "main"}
-                                    disabled={book.isRecommended} // 이미 추천된 경우 비활성화 (선택사항)
-                                >
-                                    {book.isRecommended ? "추천 완료" : "추천"}
-                                </Button>
+                                <div className="flex gap-2 justify-center">
+                                    <Button
+                                        onClick={() => handleRecommend(book.bookId)}
+                                        size="md-70"
+                                        color={book.recommended ? "cancel" : "main"}
+                                        disabled={book.recommended}
+                                    >
+                                        {book.recommended ? "추천 도서" : "추천"}
+                                    </Button>
                                 </div>
                             </td>
                         </tr>
