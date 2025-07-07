@@ -33,6 +33,11 @@ export default function AddBookPage() {
 
     const handleSubmit = async () => {
         try {
+            const offsetPublishedAt =
+                form.publishedAt.trim() !== ''
+                    ? new Date(`${form.publishedAt}T00:00:00+09:00`).toISOString()
+                    : null;
+
             const payload = {
                 ...form,
                 authors: form.authors.split(',').map((s) => s.trim()),
@@ -40,15 +45,18 @@ export default function AddBookPage() {
                 price: Number(form.price),
                 salePrice: Number(form.salePrice),
                 count: Number(form.count),
+                publishedAt: offsetPublishedAt,
             };
 
             await createBook(payload);
             router.push('/admin/books');
         } catch (err: unknown) {
-            const message = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';
+            const message = err instanceof Error ? err.message : '도서 등록에 실패했습니다.';
             setError(message);
         }
     };
+
+
 
 
     const fields = [
@@ -68,7 +76,7 @@ export default function AddBookPage() {
 
     return (
         <div className="p-10 max-w-3xl mx-auto">
-            <h1 className="text-2xl font-bold mb-6">📘 도서 등록</h1>
+            <h1 className="text-2xl font-bold mb-6"> 도서 등록</h1>
 
             <div className="space-y-4">
                 {fields.map(({ id, label }) => (
