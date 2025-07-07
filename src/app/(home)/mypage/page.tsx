@@ -16,11 +16,18 @@ interface InformationPayload {
 }
 
 export default function MyPage() {
-  const [intro, setIntro] = useState("");
-  const [isIntroEdit, setIsIntroEdit] = useState(false);
+  const { data, isPending, isError } = useMyIntro();
 
-  const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  const [intro, setIntro] = useState(data?.intro);
+
+  useEffect(() => {
+    if (data) setIntro(data.intro);
+  }, [data]);
+
+  console.log("@#######################");
+  console.log(intro);
+
+  const [isIntroEdit, setIsIntroEdit] = useState(false);
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -31,13 +38,18 @@ export default function MyPage() {
   const [isPasswordEdit, setIsPasswordEdit] = useState(false);
   const [isNickNameEdit, setIsNickNameEdit] = useState(false);
 
-  const { data } = useMyIntro();
+  console.log("data : ", data);
+
   const { mutate: updateIntro, isPending: isIntroPending } = useIntroUpdate();
   const { mutate: updateInformation, isPending: isInformationPending } =
     useInformationUpdate();
 
+  if (isPending) return <p className="flex-1 text-center">Loading…</p>;
+  if (isError || !data)
+    return <p className="flex-1 text-center">에러가 발생했어요.</p>;
+
   const handleClickEditIntro = () => {
-    setIntro(data?.intro ?? "");
+    setIntro(data.intro);
     setIsIntroEdit(true);
   };
 
@@ -94,7 +106,7 @@ export default function MyPage() {
         return;
       }
 
-      if (newUsername === username) {
+      if (newUsername === data.username) {
         alert("변경할 닉네임을 입력해주세요.");
         return;
       }
@@ -128,22 +140,6 @@ export default function MyPage() {
     setIsNickNameEdit((prev) => !prev);
   };
 
-  useEffect(() => {
-    if (data?.intro !== undefined) {
-      setIntro(data?.intro);
-    }
-  }, [data]);
-
-  useEffect(() => {
-    if (data?.username !== undefined) {
-      setUsername(data?.username);
-    }
-
-    if (data?.email !== undefined) {
-      setEmail(data?.email);
-    }
-  }, [data]);
-
   return (
     <div className="w-full min-h-[calc(100vh-120px)] flex justify-center items-center px-2 py-10">
       <MyPageNav />
@@ -173,7 +169,7 @@ export default function MyPage() {
         </div>
         <div className="flex-1 w-full  border-2 flex justify-center items-center rounded-3xl shadow">
           <textarea
-            value={intro ?? ""}
+            value={intro}
             readOnly={!isIntroEdit}
             onChange={(e) => {
               setIntro(e.target.value);
@@ -223,7 +219,7 @@ export default function MyPage() {
           {/* 이메일 */}
           <div className="flex">
             <p className="w-[150px] inline-block">이메일</p>
-            <p>{email ?? ""}</p>
+            <p>{data.email}</p>
           </div>
 
           {/* 비밀번호 */}
@@ -325,7 +321,7 @@ export default function MyPage() {
                     <label htmlFor="" className="w-[150px] inline-block">
                       닉네임
                     </label>
-                    <input type="text" value={username} disabled />
+                    <input type="text" value={data.username} disabled />
                   </div>
                 )}
               </div>
@@ -346,7 +342,7 @@ export default function MyPage() {
               <label htmlFor="" className="w-[150px] inline-block">
                 닉네임
               </label>
-              <input type="text" value={username} disabled />
+              <input type="text" value={data.username} disabled />
             </div>
           )}
         </div>

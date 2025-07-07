@@ -16,6 +16,8 @@ export default function OrderListPage() {
     itemsPerPage
   );
 
+  console.log("data : ", data);
+
   if (isPending) return <p className="flex-1 text-center">Loading…</p>;
   if (isError || !data)
     return <p className="flex-1 text-center">에러가 발생했어요.</p>;
@@ -40,7 +42,7 @@ export default function OrderListPage() {
           >
             {/* 주문일 + 상세보기 버튼 */}
             <div className="w-full flex justify-between items-center">
-              <p className="font-bold">{order.orderDate} 주문</p>
+              <p className="font-bold">{order.orderDate?.slice(0, 10)} 주문</p>
 
               {/* 주문 상세보기, 취소 및 환불하기 버튼 */}
               <div className="flex gap-4">
@@ -63,16 +65,17 @@ export default function OrderListPage() {
                 <div className="flex flex-col gap-2 cursor-pointer">
                   {/* 배송 상태 */}
                   <div className="flex gap-1 items-end">
+                    {/* 배송 도착일이 2틀 뒤인데 현재 날짜가 2틀뒤인 월,일 이 맞다면 이코드 어떻게 하지? */}
                     <p className="font-bold">{book.orderStatus}</p>
                     <small className="text-main">
-                      {order.expectedArrivalDate}
+                      {order.expectedArrivalDate} 도착 예정일
                     </small>
                   </div>
 
                   {/* 책 이미지 + 작가 + 책 줄거리 + 책 가격 + 책 수량 */}
                   <div className="flex justify-center items-center gap-4">
                     {/* 이미지 */}
-                    <div className="w-[120px] h-[120px] overflow-hidden border shadow relative">
+                    <div className="w-[160px] h-[160px] overflow-hidden border shadow relative">
                       <Image
                         alt={`${book.thumbnail}`}
                         src={book.thumbnail ?? ""}
@@ -83,7 +86,9 @@ export default function OrderListPage() {
                     {/* 책 정보 */}
                     <div className="flex flex-col gap-2">
                       <p>{book.title}</p>
-                      <p>{book.contents}</p>
+                      <p className="truncate text-sm max-w-[200px]">
+                        {book.contents}
+                      </p>
                       {/* 수량 가격 */}
                       <div className="flex gap-2  text-gray-400">
                         <small>{book.salePrice}원</small>
