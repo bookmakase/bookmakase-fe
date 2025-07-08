@@ -11,10 +11,13 @@ export const api = {
     search: `api/v1/books/search`,
     detail: (bookId: string | number) => `/api/v1/books/${bookId}`,
   },
-  orders: {},
+  orders: {
+    orderList: `/api/v1`,
+  },
   cart: {},
   admin: {
     books: `api/v1/admin/books`,
+    recommendations: `/api/v1/admin/books/recommendations`
   },
   reviews: {
     list: (bookId: string | number) => `/api/v1/books/${bookId}/reviews`,
