@@ -5,11 +5,13 @@ import BookTitleAndIntro from "./_components/BookTitleAndIntro";
 import StockAndPurchase from "./_components/StockAndPurchase";
 import { fetchBookDetail } from "@/api/book";
 
-interface BookDetailPageProps {
-  params: { id: string };
-}
+type BookDetailPageParams = Promise<{ id: string }>;
 
-export default async function BookDetailPage({ params }: BookDetailPageProps) {
+export default async function BookDetailPage({
+  params,
+}: {
+  params: BookDetailPageParams;
+}) {
   const { id } = await params;
 
   // id 유효성 검사
@@ -52,7 +54,7 @@ export default async function BookDetailPage({ params }: BookDetailPageProps) {
           <StockAndPurchase
             bookId={book.bookId}
             price={book.price}
-            salePrice={book.salePrice}
+            salePriceProp={book.salePrice}
             status={book.status}
           />
         </div>
