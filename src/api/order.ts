@@ -47,3 +47,12 @@ export const getOrderItemList = async (page: number, size = 4) => {
     throw error;
   }
 };
+
+export const postOrder = async () => {
+  try {
+    const response = await instance.post(`${api.orders.orderList}/order-list`);
+  } catch (error) {
+    console.error("주문 요청청 실패 :", error);
+    throw error;
+  }
+};

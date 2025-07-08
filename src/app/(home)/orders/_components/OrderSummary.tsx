@@ -2,11 +2,16 @@
 
 import Button from "@/components/ui/Button";
 import { useOrderStore } from "@/store/useOrderStore";
+import { usePostOrder } from "@/hooks/mutation/useOrder";
 
 export default function OrderSummary() {
+  // store
   const { deliveryPrice, usedPoint, earningPoint, totalPrice } =
     useOrderStore();
   const paymentAmount = totalPrice + deliveryPrice - usedPoint;
+
+  // 주문 요청 훅
+  const { mutate: postOrderMutate } = usePostOrder();
 
   return (
     <section>
@@ -34,7 +39,13 @@ export default function OrderSummary() {
           <span>{earningPoint}P</span>
         </div>
       </div>
-      <Button variant="fill" color="main" size="md" className="w-full mt-4">
+      <Button
+        variant="fill"
+        color="main"
+        size="md"
+        className="w-full mt-4"
+        onClick={() => postOrderMutate()}
+      >
         결제하기
       </Button>
     </section>
