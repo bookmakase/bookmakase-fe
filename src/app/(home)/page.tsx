@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
 import { fetchBookHome, searchBooks  } from "@/api/home";
-
 import type {BookHomeItem,BookHomeSectionResponse } from "@/types/book";
 
 
@@ -18,6 +17,19 @@ export default function Home() {
     const latestBooks: BookHomeItem[] =
         books?.find((section) => section.type === "latest")?.books ?? [];
 
+    const [recommendedPage, setRecommendedPage] = useState(0);
+    const [latestPage, setLatestPage,] = useState(0);
+    const ITEMS_PER_PAGE = 6;
+
+    const paginatedRecommendedBooks = recommendedBooks.slice(
+        recommendedPage * ITEMS_PER_PAGE,
+        (recommendedPage + 1) * ITEMS_PER_PAGE
+    );
+
+    const paginatedLatestBooks = latestBooks.slice(
+        latestPage * ITEMS_PER_PAGE,
+        (latestPage + 1) * ITEMS_PER_PAGE
+    );
 
     useEffect(() => {
         const fetchData = async () => {
@@ -71,12 +83,12 @@ export default function Home() {
 
 
                 {searchResults.length > 0 && (
-                    <ul className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <ul className="flex flex-wrap gap-4 justify-start">
                         {searchResults.map((book, i) => (
                             <Link
                                 key={i}
                                 href={`/books/${book.bookId}`}
-                                className="w-full border p-2 rounded-xl shadow-sm bg-white hover:shadow-md transition"
+                                className="w-[160px] border p-2 rounded-xl shadow-sm bg-white hover:shadow-md transition"
                             >
                                 <li>
                                     {book.thumbnail ? (
@@ -99,21 +111,36 @@ export default function Home() {
                         ))}
                     </ul>
                 )}
+                
             </section>
 
 
 
-            {/* 추천 도서 */}
             {recommendedBooks.length > 0 && (
                 <section className="w-full max-w-6xl px-4">
-                    <h2 className="text-xl font-bold mb-4">에디터의 북마카세</h2>
-                    <div className="overflow-x-auto">
-                        <ul className="flex gap-4 min-w-max">
-                            {recommendedBooks.map((book, i) => (
+                    {/* ✅ 제목: 왼쪽 정렬 + 카드 위에 위치 */}
+                    <div className="w-full mb-4">
+                        <h2 className="text-xl font-bold text-left ml-[60px]">에디터의 북마카세🍣</h2>
+                    </div>
+
+                    {/* ✅ 버튼 + 북카드 줄 */}
+                    <div className="flex items-center justify-center gap-4">
+                        {/* ◀ 이전 버튼 */}
+                        <button
+                            onClick={() => setRecommendedPage((prev) => Math.max(prev - 1, 0))}
+                            disabled={recommendedPage === 0}
+                            className="bg-white border rounded-full w-10 h-10 flex items-center justify-center shadow-md disabled:opacity-50"
+                        >
+                            &lt;
+                        </button>
+
+                        {/* 🟦 북카드 6개 */}
+                        <ul className="grid grid-cols-3 md:grid-cols-6 gap-4">
+                            {paginatedRecommendedBooks.map((book, i) => (
                                 <Link
                                     key={i}
                                     href={`/books/${book.bookId}`}
-                                    className="flex-shrink-0 w-[160px] border p-2 rounded-xl shadow-sm bg-white hover:shadow-md transition"
+                                    className="w-[160px] border p-2 rounded-xl shadow-sm bg-white hover:shadow-md transition"
                                 >
                                     <li>
                                         {book.thumbnail ? (
@@ -135,20 +162,49 @@ export default function Home() {
                                 </Link>
                             ))}
                         </ul>
+
+                        {/* ▶ 다음 버튼 */}
+                        <button
+                            onClick={() =>
+                                setRecommendedPage((prev) =>
+                                    (prev + 1) * ITEMS_PER_PAGE < recommendedBooks.length ? prev + 1 : prev
+                                )
+                            }
+                            disabled={(recommendedPage + 1) * ITEMS_PER_PAGE >= recommendedBooks.length}
+                            className="bg-white border rounded-full w-10 h-10 flex items-center justify-center shadow-md disabled:opacity-50"
+                        >
+                            &gt;
+                        </button>
                     </div>
                 </section>
             )}
 
-            {/*  최신 도서 */}
+
+
             <section className="w-full max-w-6xl px-4">
-                <h2 className="text-xl font-bold mb-4">새로 등록된 책</h2>
-                <div className="overflow-x-auto">
-                    <ul className="flex gap-4 min-w-max">
-                        {latestBooks.map((book, i) => (
+                {/* ✅ 제목: 왼쪽 정렬 + 북카드 위에 */}
+                <div className="w-full mb-4">
+                    <h2 className="text-xl font-bold text-left ml-[60px]">새로 등록된 책📚</h2>
+                </div>
+
+                {/* ✅ 버튼 + 북카드 줄 */}
+                <div className="flex items-center justify-center gap-4">
+                    {/* ◀ 이전 버튼 */}
+                    <button
+                        onClick={() => setLatestPage((prev) => Math.max(prev - 1, 0))}
+                        disabled={latestPage === 0}
+                        className="bg-white border rounded-full w-10 h-10 flex items-center justify-center shadow-md disabled:opacity-50"
+                    >
+                        &lt;
+                    </button>
+
+                    {/* 🟦 북카드 6개 */}
+                    <ul className="grid grid-cols-3 md:grid-cols-6 gap-4">
+                        {paginatedLatestBooks.map((book, i) => (
                             <Link
                                 key={i}
                                 href={`/books/${book.bookId}`}
-                                className="flex-shrink-0 w-[160px] border p-2 rounded-xl shadow-sm bg-white hover:shadow-md transition"
+                                className="w-[160px] border p-2 rounded-xl shadow-sm bg-white hover:shadow-md transition"
                             >
                                 <li>
                                     {book.thumbnail ? (
@@ -170,8 +226,23 @@ export default function Home() {
                             </Link>
                         ))}
                     </ul>
+
+                    {/* ▶ 다음 버튼 */}
+                    <button
+                        onClick={() =>
+                            setLatestPage((prev) =>
+                                (prev + 1) * ITEMS_PER_PAGE < latestBooks.length ? prev + 1 : prev
+                            )
+                        }
+                        disabled={(latestPage + 1) * ITEMS_PER_PAGE >= latestBooks.length}
+                        className="bg-white border rounded-full w-10 h-10 flex items-center justify-center shadow-md disabled:opacity-50"
+                    >
+                        &gt;
+                    </button>
                 </div>
             </section>
+
+
 
         </main>
     );
