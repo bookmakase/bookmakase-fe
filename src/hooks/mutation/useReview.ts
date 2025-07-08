@@ -1,5 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteAndRestoration } from "@/api/review";
+import { deleteAndRestoration, postReview } from "@/api/review";
+import type { ReviewCreateReqProps } from "@/types/review";
+
+export const usePostReview = () => {
+  return useMutation({
+    mutationFn: (reviewData: ReviewCreateReqProps) => postReview(reviewData),
+    onError: (error) => {
+      console.error("리뷰 작성 실패", error);
+    },
+  });
+};
 
 export const usePatchReview = () => {
   const queryClient = useQueryClient();
