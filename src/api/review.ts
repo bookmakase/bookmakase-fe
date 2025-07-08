@@ -36,7 +36,7 @@ export const fetchReviews = async (
       throw new Error("리뷰 목록 조회 실패");
     }
 
-    console.log("리뷰 목록 데이터", response.data);
+    // console.log("리뷰 목록 데이터", response.data);
     return response.data;
   } catch (e) {
     console.error("리뷰 목록 조회 실패", e);
@@ -54,7 +54,7 @@ export const deleteAndRestoration = async (reviewId: number) => {
       throw new Error("리뷰 삭제, 복구 실패");
     }
 
-    console.log("리뷰 삭제, 복구 결과", response.data);
+    // console.log("리뷰 삭제, 복구 결과", response.data);
     return response.data;
   } catch (e) {
     console.error("리뷰 삭제, 복구 실패", e);
