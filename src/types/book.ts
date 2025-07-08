@@ -49,6 +49,7 @@ export interface BookUpdateRequest {
   status: string | null;
 }
 export interface BookHomeItem {
+  bookId: number;
   title: string;
   authors: string[] | null; // comma-separated
   thumbnail: string | null;
