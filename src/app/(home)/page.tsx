@@ -103,6 +103,10 @@ export default function Home() {
             ))}
           </ul>
         )}
+        {/* 검색 결과 없을 때 메시지 */}
+        {searchResults.length === 0 && keyword.trim() !== "" && (
+            <p className="text-center text-gray-500 mt-4">일치하는 결과가 없습니다.</p> 
+        )}
       </section>
 
       {recommendedBooks.length > 0 && (
