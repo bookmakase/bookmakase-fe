@@ -1,5 +1,6 @@
 import { api } from "@/constants/apiPath";
 import { instance } from "@/lib/axios";
+import { User } from "@/types/user";
 
 export interface userInformationUpdate {
   currentPassword?: string;
@@ -40,7 +41,7 @@ export const userInformationUpdate = async (data: userInformationUpdate) => {
 
 export const getUserInfo = async () => {
   try {
-    const response = await instance.get(`${api.users}/me`);
+    const response = await instance.get<User>(`${api.users}/me`);
     return response.data;
   } catch (e) {
     console.error("내 정보 조회 실패 : ", e);

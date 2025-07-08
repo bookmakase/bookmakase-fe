@@ -21,3 +21,10 @@ export interface userInformationUpdate {
   confirmNewPassword?: string;
   newUsername?: string;
 }
+
+export interface User {
+  id: number;
+  email: string;
+  username: string;
+  role: "ROLE_USER" | "ROLE_ADMIN";
+}
