@@ -14,3 +14,17 @@ export interface MyInfo {
   adress: string;
   point: number;
 }
+
+export interface userInformationUpdate {
+  currentPassword?: string;
+  newPassword?: string;
+  confirmNewPassword?: string;
+  newUsername?: string;
+}
+
+export interface User {
+  id: number;
+  email: string;
+  username: string;
+  role: "ROLE_USER" | "ROLE_ADMIN";
+}
