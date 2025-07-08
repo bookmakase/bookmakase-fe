@@ -52,7 +52,7 @@ export default function Home() {
   };
 
   return (
-    <main className="w-full min-h-[calc(100vh-120px)] flex flex-col gap-10 items-center">
+    <main className="w-full min-h-[calc(100vh-120px)] flex flex-col gap-10 items-center py-10">
       {/* 🔍 검색 폼 */}
       <section className="w-full max-w-6xl px-4">
         <div className="flex justify-center items-center gap-4 mb-4">
