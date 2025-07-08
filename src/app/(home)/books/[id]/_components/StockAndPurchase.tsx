@@ -1,11 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth";
 import { useOrderItemStore } from "@/store/useOrderItemStore";
 import { calculatePoint } from "@/utils/pointUtils";
 import Button from "@/components/ui/Button";
+import { useMyIntro } from "@/hooks/query/useMyInfo";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { usePatchAddress } from "@/hooks/mutation/useInformationUser";
 
 interface StockAndPurchaseProps {
   bookId: number;
@@ -23,6 +35,10 @@ export default function StockAndPurchase({
 }: StockAndPurchaseProps) {
   const router = useRouter();
 
+  // api 훅
+  const { data: myInfo, isLoading, isError } = useMyIntro();
+  const { mutate: patchAddressMutate } = usePatchAddress();
+
   // store
   const { isLogin } = useAuthStore();
   const { addSelectedItem, clearItems, setOrderFlowActive } =
@@ -32,9 +48,28 @@ export default function StockAndPurchase({
   const salePrice = salePriceProp ? salePriceProp : 0;
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(salePrice);
+  const [address, setAddress] = useState("");
 
   const isPurchasable = status === "정상판매";
   const earningPoint = calculatePoint(price ? price : 0);
+
+  useEffect(() => {
+    if (myInfo) {
+      setAddress(myInfo.address);
+    }
+  }, [myInfo]);
+
+  if (isLoading) {
+    return <div className="text-center text-gray-400 py-8">로딩 중...</div>;
+  }
+
+  if (isError || myInfo === undefined || myInfo === null) {
+    return (
+      <div className="text-center text-red-400 py-8">
+        주문자 정보가 정확하지 않습니다.
+      </div>
+    );
+  }
 
   // 메서드
   const decreaseQuantity = () => {
@@ -98,10 +133,46 @@ export default function StockAndPurchase({
         </div>
         {isLogin && (
           <div className="flex items-center justify-between gap-2">
-            <span className="text-dark-gray">주소지</span>
-            <Button size="sm" variant="outline" color="main" rounded="full">
-              변경
-            </Button>
+            <span className="text-dark-gray">{myInfo.address}</span>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button size="sm" variant="outline" color="main" rounded="full">
+                  변경
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>배송지 변경</DialogTitle>
+                  <DialogDescription>
+                    아래 입력칸에 새로운 배송지를 입력해주세요
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="flex items-center gap-2">
+                  <div className="grid flex-1 gap-2">
+                    <label htmlFor="link" className="sr-only">
+                      Link
+                    </label>
+                    <input
+                      id="link"
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
+                  </div>
+                </div>
+                <DialogFooter className="sm:justify-start">
+                  <DialogClose asChild>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      color="main"
+                      onClick={() => patchAddressMutate(address)}
+                    >
+                      변경하기
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         )}
       </div>

@@ -1,4 +1,4 @@
-import { userInformationUpdate } from "@/api/user";
+import { userInformationUpdate, patchAddress } from "@/api/user";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useInformationUpdate() {
@@ -17,3 +17,17 @@ export function useInformationUpdate() {
     },
   });
 }
+
+export const usePatchAddress = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (address: string) => patchAddress(address),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["myIntro"] });
+    },
+    onError: (error) => {
+      console.error("주소 변경 실패 : ", error);
+    },
+  });
+};
