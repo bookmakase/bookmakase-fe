@@ -78,7 +78,7 @@ export default function Home() {
               <Link
                 key={i}
                 href={`/books/${book.bookId}`}
-                className="w-[160px] border p-2 rounded-xl shadow-sm bg-white hover:shadow-md transition"
+                className="w-[160px] border p-2  shadow-sm bg-white hover:shadow-md transition"
               >
                 <li>
                   {book.thumbnail ? (
@@ -133,7 +133,7 @@ export default function Home() {
                 <Link
                   key={i}
                   href={`/books/${book.bookId}`}
-                  className="w-[160px] border p-2 rounded-xl shadow-sm bg-white hover:shadow-md transition"
+                  className="w-[160px] border p-2  shadow-sm bg-white hover:shadow-md transition"
                 >
                   <li>
                     {book.thumbnail ? (
@@ -204,7 +204,7 @@ export default function Home() {
               <Link
                 key={i}
                 href={`/books/${book.bookId}`}
-                className="w-[160px] border p-2 rounded-xl shadow-sm bg-white hover:shadow-md transition"
+                className="w-[160px] border p-2  shadow-sm bg-white hover:shadow-md transition"
               >
                 <li>
                   {book.thumbnail ? (
