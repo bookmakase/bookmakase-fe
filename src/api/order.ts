@@ -1,5 +1,6 @@
 import { api } from "@/constants/apiPath";
 import { instance } from "@/lib/axios";
+import type { OrderRequestData } from "@/types/order";
 
 export interface OrderItemResponse {
   bookId: number;
@@ -44,6 +45,24 @@ export const getOrderItemList = async (page: number, size = 4) => {
     return response.data;
   } catch (error) {
     console.error("구매 목록 조회 실패 :", error);
+    throw error;
+  }
+};
+
+export const postOrder = async (reqData: OrderRequestData) => {
+  try {
+    const response = await instance.post(
+      `${api.orders.orderList}/order-list`,
+      reqData
+    );
+
+    if (response.status !== 201) {
+      throw new Error("주문 요청 실패");
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error("주문 요청 실패 :", error);
     throw error;
   }
 };

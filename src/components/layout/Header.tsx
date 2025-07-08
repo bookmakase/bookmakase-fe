@@ -15,7 +15,7 @@ export default function Header() {
   const { mutate, isPending } = useLogout();
   const { isLogin, setAuth, role } = useAuthStore();
   const [user, setUser] = useState<User | null>(null);
-  console.log("user : ", user);
+  // console.log("user : ", user);
 
   const isAdmin = role === "ROLE_ADMIN";
 
@@ -87,6 +87,9 @@ export default function Header() {
           <div className="flex items-center gap-8">
             <Link href="/admin/books" className="font-semibold">
               관리자 페이지
+            </Link>
+            <Link href="/mypage" aria-label="마이 페이지">
+              <UserIcon className="w-6 h-6" />
             </Link>
             <Button
               onClick={handleClickLogout}
