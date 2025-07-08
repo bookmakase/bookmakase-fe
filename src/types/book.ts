@@ -14,6 +14,7 @@ export interface BookDetail extends BookItem {
   translators: string[] | null;
   publishedAt: string | null;
   publisher: string | null;
+  price: number | null;
   salePrice: number | null;
   thumbnail: string | null;
 }
