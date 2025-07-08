@@ -3,9 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Button from "@/components/ui/Button";
-import { fetchBookHome, searchBooks  } from "@/api/home";
-import type {BookHomeItem,BookHomeSectionResponse } from "@/types/book";
-
+import { fetchBookHome, searchBooks } from "@/api/home";
+import type { BookHomeItem, BookHomeSectionResponse } from "@/types/book";
 
 export default function Home() {
     const [books, setBooks] = useState<BookHomeSectionResponse[] | null>(null);
@@ -18,7 +17,7 @@ export default function Home() {
         books?.find((section) => section.type === "latest")?.books ?? [];
 
     const [recommendedPage, setRecommendedPage] = useState(0);
-    const [latestPage, setLatestPage,] = useState(0);
+    const [latestPage, setLatestPage] = useState(0);
     const ITEMS_PER_PAGE = 6;
 
     const paginatedRecommendedBooks = recommendedBooks.slice(
@@ -52,15 +51,8 @@ export default function Home() {
         }
     };
 
-
-
     return (
-        <main className="w-full min-h-[calc(100vh-120px)] flex flex-col gap-10 items-center">
-
-            <Link href={"/admin/books"} className="font-bookk-bold mt-4">
-                관리자 페이지 이동
-            </Link>
-
+        <main className="w-full min-h-[calc(100vh-120px)] flex flex-col gap-10 items-center py-10">
             {/* 🔍 검색 폼 */}
             <section className="w-full max-w-6xl px-4">
                 <div className="flex justify-center items-center gap-4 mb-4">
@@ -79,8 +71,6 @@ export default function Home() {
 
                     <Button onClick={handleSearch}>검색</Button>
                 </div>
-
-
 
                 {searchResults.length > 0 && (
                     <ul className="flex flex-wrap gap-4 justify-start">
@@ -102,7 +92,9 @@ export default function Home() {
                                             이미지 없음
                                         </div>
                                     )}
-                                    <h3 className="font-semibold text-sm truncate">{book.title}</h3>
+                                    <h3 className="font-semibold text-sm truncate">
+                                        {book.title}
+                                    </h3>
                                     <p className="text-xs text-gray-500 line-clamp-1">
                                         {book.authors?.join(", ") ?? "저자 정보 없음"}
                                     </p>
@@ -111,23 +103,24 @@ export default function Home() {
                         ))}
                     </ul>
                 )}
-                
             </section>
-
-
 
             {recommendedBooks.length > 0 && (
                 <section className="w-full max-w-6xl px-4">
                     {/* ✅ 제목: 왼쪽 정렬 + 카드 위에 위치 */}
                     <div className="w-full mb-4">
-                        <h2 className="text-xl font-bold text-left ml-[60px]">에디터의 북마카세🍣</h2>
+                        <h2 className="text-xl font-bold text-left ml-[60px]">
+                            에디터의 북마카세🍣
+                        </h2>
                     </div>
 
                     {/* ✅ 버튼 + 북카드 줄 */}
                     <div className="flex items-center justify-center gap-4">
                         {/* ◀ 이전 버튼 */}
                         <button
-                            onClick={() => setRecommendedPage((prev) => Math.max(prev - 1, 0))}
+                            onClick={() =>
+                                setRecommendedPage((prev) => Math.max(prev - 1, 0))
+                            }
                             disabled={recommendedPage === 0}
                             className="bg-white border rounded-full w-10 h-10 flex items-center justify-center shadow-md disabled:opacity-50"
                         >
@@ -140,7 +133,8 @@ export default function Home() {
                                 <Link
                                     key={i}
                                     href={`/books/${book.bookId}`}
-                                    className="w-[160px] border p-2  shadow-sm bg-white hover:shadow-md transition"
+                                    className="w-[160px] border p-2
+                                     shadow-sm bg-white hover:shadow-md transition"
                                 >
                                     <li>
                                         {book.thumbnail ? (
@@ -154,7 +148,9 @@ export default function Home() {
                                                 이미지 없음
                                             </div>
                                         )}
-                                        <h3 className="font-semibold text-sm truncate">{book.title}</h3>
+                                        <h3 className="font-semibold text-sm truncate">
+                                            {book.title}
+                                        </h3>
                                         <p className="text-xs text-gray-500 line-clamp-1">
                                             {book.authors?.join(", ") ?? "저자 정보 없음"}
                                         </p>
@@ -167,10 +163,15 @@ export default function Home() {
                         <button
                             onClick={() =>
                                 setRecommendedPage((prev) =>
-                                    (prev + 1) * ITEMS_PER_PAGE < recommendedBooks.length ? prev + 1 : prev
+                                    (prev + 1) * ITEMS_PER_PAGE < recommendedBooks.length
+                                        ? prev + 1
+                                        : prev
                                 )
                             }
-                            disabled={(recommendedPage + 1) * ITEMS_PER_PAGE >= recommendedBooks.length}
+                            disabled={
+                                (recommendedPage + 1) * ITEMS_PER_PAGE >=
+                                recommendedBooks.length
+                            }
                             className="bg-white border rounded-full w-10 h-10 flex items-center justify-center shadow-md disabled:opacity-50"
                         >
                             &gt;
@@ -179,12 +180,12 @@ export default function Home() {
                 </section>
             )}
 
-
-
             <section className="w-full max-w-6xl px-4">
                 {/* ✅ 제목: 왼쪽 정렬 + 북카드 위에 */}
                 <div className="w-full mb-4">
-                    <h2 className="text-xl font-bold text-left ml-[60px]">새로 등록된 책📚</h2>
+                    <h2 className="text-xl font-bold text-left ml-[60px]">
+                        새로 등록된 책📚
+                    </h2>
                 </div>
 
                 {/* ✅ 버튼 + 북카드 줄 */}
@@ -218,7 +219,9 @@ export default function Home() {
                                             이미지 없음
                                         </div>
                                     )}
-                                    <h3 className="font-semibold text-sm truncate">{book.title}</h3>
+                                    <h3 className="font-semibold text-sm truncate">
+                                        {book.title}
+                                    </h3>
                                     <p className="text-xs text-gray-500 line-clamp-1">
                                         {book.authors?.join(", ") ?? "저자 정보 없음"}
                                     </p>
@@ -231,7 +234,9 @@ export default function Home() {
                     <button
                         onClick={() =>
                             setLatestPage((prev) =>
-                                (prev + 1) * ITEMS_PER_PAGE < latestBooks.length ? prev + 1 : prev
+                                (prev + 1) * ITEMS_PER_PAGE < latestBooks.length
+                                    ? prev + 1
+                                    : prev
                             )
                         }
                         disabled={(latestPage + 1) * ITEMS_PER_PAGE >= latestBooks.length}
@@ -241,9 +246,6 @@ export default function Home() {
                     </button>
                 </div>
             </section>
-
-
-
         </main>
     );
 }
