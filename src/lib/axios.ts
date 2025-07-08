@@ -40,7 +40,7 @@ instance.interceptors.response.use(
       console.log("#################################1321312323");
 
       localStorage.clear();
-      // window.location.replace("/login");
+      window.location.replace("/login");
       return Promise.reject(error);
     }
 
@@ -55,7 +55,7 @@ instance.interceptors.response.use(
 
       if (!refreshToken) {
         localStorage.clear();
-        // window.location.href = "/login";
+        window.location.href = "/login";
         return Promise.reject(error);
       }
 
@@ -74,7 +74,7 @@ instance.interceptors.response.use(
         console.log("3333333333333333333333331");
         // 리프레쉬 토큰 만료 시
         localStorage.clear();
-        // window.location.href = "/login";
+        window.location.href = "/login";
         return Promise.reject(refreshErr);
       }
     }
