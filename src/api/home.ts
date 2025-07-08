@@ -1,8 +1,8 @@
 import { instance } from "@/lib/axios";
 import { api } from "@/constants/apiPath";
-import type { BookHomeItem } from '@/types/book';
+import type { BookHomeItem ,BookHomeSectionResponse} from '@/types/book';
 
-export async function fetchBookHome(): Promise<BookHomeItem> {
+export async function fetchBookHome(): Promise<BookHomeSectionResponse[]> {
     try {
         const res = await instance.get(`${api.books.home}`);
         return res.data;
