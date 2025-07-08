@@ -5,6 +5,6 @@ export function useMyIntro() {
   return useQuery({
     queryKey: ["myIntro"],
     queryFn: getMyInfo,
-    staleTime: 5 * 60_000,
+    staleTime: 5,
   });
 }

@@ -1,27 +1,61 @@
-
 export interface BookItem {
-    bookId: number;
-    title: string;
-    authors: string[];
-    isbn: string;
-    createdAt: string;
-    status: string;
-    count: number;
-    isRecommended: boolean; // ✅ 프론트 전용 필드
+  bookId: number;
+  title: string;
+  authors: string[] | null;
+  isbn: string | null;
+  createdAt: string;
+  status: string | null;
+  count: number;
+  recommended: boolean;
+}
+
+export interface BookDetail extends BookItem {
+  contents: string | null;
+  translators: string[] | null;
+  publishedAt: string | null;
+  publisher: string | null;
+  price: number | null;
+  salePrice: number | null;
+  thumbnail: string | null;
 }
 
 export interface BookCreateRequest {
-    title: string;
-    contents: string;
-    isbn: string;
-    publishedAt: string;
-    authors: string[]; // comma-separated
-    translators: string[]; // comma-separated
-    publisher: string;
-    price: number;
-    salePrice: number;
-    count: number;
-    thumbnail: string;
-    status: string;
+  title: string;
+  contents: string | null;
+  isbn: string | null;
+  publishedAt: string | null;
+  authors: string[] | null; // comma-separated
+  translators: string[] | null; // comma-separated
+  publisher: string | null;
+  price: number | null;
+  salePrice: number | null;
+  count: number;
+  thumbnail: string | null;
+  status: string | null;
+}
 
+export interface BookUpdateRequest {
+  title: string;
+  contents: string | null;
+  isbn: string | null;
+  publishedAt: string | null;
+  authors: string[] | null; // comma-separated
+  translators: string[] | null; // comma-separated
+  publisher: string | null;
+  price: number | null;
+  salePrice: number | null;
+  count: number;
+  thumbnail: string | null;
+  status: string | null;
+}
+export interface BookHomeItem {
+  bookId: number;
+  title: string;
+  authors: string[] | null; // comma-separated
+  thumbnail: string | null;
+}
+export interface BookHomeSectionResponse {
+  type: string;
+  title: string;
+  books: BookHomeItem[];
 }
