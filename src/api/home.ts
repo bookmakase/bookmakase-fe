@@ -1,8 +1,8 @@
 import { instance } from "@/lib/axios";
 import { api } from "@/constants/apiPath";
-import type { BookHomeResponse } from '@/types/book';
+import type { BookHomeItem ,BookHomeSectionResponse} from '@/types/book';
 
-export async function fetchBookHome(): Promise<BookHomeResponse> {
+export async function fetchBookHome(): Promise<BookHomeSectionResponse[]> {
     try {
         const res = await instance.get(`${api.books.home}`);
         return res.data;
@@ -12,7 +12,7 @@ export async function fetchBookHome(): Promise<BookHomeResponse> {
     }
 }
 
-export async function searchBooks(title?: string, author?: string): Promise<BookHomeResponse[]> {
+export async function searchBooks(title?: string, author?: string): Promise<BookHomeItem[]> {
     const params = new URLSearchParams();
     if (title) params.append("title", title);
     if (author) params.append("author", author);

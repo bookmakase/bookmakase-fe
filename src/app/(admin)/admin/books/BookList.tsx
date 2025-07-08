@@ -6,6 +6,8 @@ import { fetchBooks } from '@/api/admin';
 import Button from '@/components/ui/Button';
 import type { PageInfo } from '@/types/pagination';
 import type { BookItem } from '@/types/book';
+import { createRecommendation } from '@/api/admin';
+
 
 export default function BookList() {
     const [books, setBooks] = useState<BookItem[]>([]);
@@ -19,9 +21,7 @@ export default function BookList() {
     const fetchBooksData = useCallback(async () => {
         try {
             const res = await fetchBooks(page);
-            setBooks(
-                res.content.map((book) => ({ ...book, isRecommended: false }))
-            );
+            setBooks(res.content);
             setPageInfo(res);
         } catch (err: unknown) {
             const message = err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다.';
@@ -35,13 +35,24 @@ export default function BookList() {
 
     const handleMoveToPage = (p: number) => router.push(`/admin/books?page=${p}`);
     const handleEdit = (bookId: number) => router.push(`/admin/edit-book/${bookId}`);
-    const handleToggleRecommend = (bookId: number, current: boolean) => {
-        setBooks((prev) =>
-            prev.map((book) =>
-                book.bookId === bookId ? { ...book, isRecommended: !current } : book
-            )
-        );
+
+    const handleRecommend = async (bookId: number) => {
+        try {
+            await createRecommendation(bookId);
+            setBooks((prev) =>
+                prev.map((book) =>
+                    book.bookId === bookId ? { ...book, recommended: true } : book
+                )
+            );
+
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : '추천 등록에 실패했습니다.';
+            setError(message);
+        }
     };
+
+
+
     const handleAddBook = () => router.push("/admin/add-book");
     const handleMoveToTab = (path: string) => router.push(path);
 
@@ -95,18 +106,24 @@ export default function BookList() {
                             <td className="border px-3 py-2 text-center">{book.count}</td>
                             <td className="border px-3 py-2 whitespace-nowrap">
                                 <div className="flex gap-2 justify-center">
-                                    <Button onClick={() => handleEdit(book.bookId)} size="md-70" color="main">
+                                    <Button
+                                        onClick={() => handleEdit(book.bookId)}
+                                        size="md-70"
+                                        color="main"
+                                    >
                                         편집
                                     </Button>
                                     <Button
-                                        onClick={() => handleToggleRecommend(book.bookId, book.isRecommended)}
+                                        onClick={() => handleRecommend(book.bookId)}
                                         size="md-70"
-                                        color={book.isRecommended ? "cancel" : "main"}
+                                        color={book.recommended ? "cancel" : "main"}
+                                        disabled={book.recommended}
                                     >
-                                        {book.isRecommended ? "추천 해제" : "추천"}
+                                        {book.recommended ? "추천 도서" : "추천"}
                                     </Button>
                                 </div>
                             </td>
+
                         </tr>
                     ))}
                     </tbody>

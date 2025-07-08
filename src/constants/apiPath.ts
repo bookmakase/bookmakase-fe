@@ -17,6 +17,7 @@ export const api = {
   cart: {},
   admin: {
     books: `api/v1/admin/books`,
+    recommendations: `/api/v1/admin/books/recommendations`
   },
   reviews: {
     list: (bookId: string | number) => `/api/v1/books/${bookId}/reviews`,

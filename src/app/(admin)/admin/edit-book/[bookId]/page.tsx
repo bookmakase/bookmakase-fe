@@ -121,7 +121,7 @@ export default function EditBookPage() {
 
             <div className="mt-6">
                 <Button onClick={handleSubmit} size="lg" color="main">
-                    수정 저장
+                    저장
                 </Button>
             </div>
         </div>

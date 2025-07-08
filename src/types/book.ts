@@ -6,7 +6,7 @@ export interface BookItem {
   createdAt: string;
   status: string | null;
   count: number;
-  isRecommended: boolean; // ✅ 프론트 전용 필드
+  recommended: boolean;
 }
 
 export interface BookDetail extends BookItem {
@@ -48,11 +48,13 @@ export interface BookUpdateRequest {
   thumbnail: string | null;
   status: string | null;
 }
-export interface BookHomeResponse {
+export interface BookHomeItem {
   title: string;
   authors: string[] | null; // comma-separated
   thumbnail: string | null;
 }
-export interface BookHomeResponse {
-  latestBooks: BookHomeResponse[];
+export interface BookHomeSectionResponse {
+  type: string;
+  title: string;
+  books: BookHomeItem[];
 }
