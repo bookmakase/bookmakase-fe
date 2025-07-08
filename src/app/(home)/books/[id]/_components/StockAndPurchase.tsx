@@ -9,16 +9,16 @@ import Button from "@/components/ui/Button";
 
 interface StockAndPurchaseProps {
   bookId: number;
-  price: number;
-  salePrice: number;
-  status: "정상판매" | "품절";
+  price: number | null;
+  salePriceProp: number | null;
+  status: string | null;
 }
 
 // 현재 재고가 없어 월요일에 이 부분에 대해 논의 필요
 export default function StockAndPurchase({
   bookId,
   price,
-  salePrice,
+  salePriceProp,
   status,
 }: StockAndPurchaseProps) {
   const router = useRouter();
@@ -29,11 +29,12 @@ export default function StockAndPurchase({
     useOrderItemStore();
 
   // 변수
+  const salePrice = salePriceProp ? salePriceProp : 0;
   const [quantity, setQuantity] = useState(1);
   const [totalPrice, setTotalPrice] = useState(salePrice);
 
   const isPurchasable = status === "정상판매";
-  const earningPoint = calculatePoint(price);
+  const earningPoint = calculatePoint(price ? price : 0);
 
   // 메서드
   const decreaseQuantity = () => {
@@ -74,9 +75,11 @@ export default function StockAndPurchase({
         <span className="font-bookk-bold text-2xl text-main">
           {salePrice.toLocaleString()}원
         </span>
-        <span className="text-dark-gray line-through text-base">
-          {price.toLocaleString()}원
-        </span>
+        {price && (
+          <span className="text-dark-gray line-through text-base">
+            {price.toLocaleString()}원
+          </span>
+        )}
       </div>
       <hr className="my-1 border-gray-200" />
       {/* 포인트 */}
