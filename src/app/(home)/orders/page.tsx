@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-// import { notFound } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useOrderItemStore } from "@/store/useOrderItemStore";
 import OrderSummary from "./_components/OrderSummary";
 import CustomerInfo from "./_components/CustomerInfo";
@@ -9,11 +9,15 @@ import OrderProductSection from "./_components/OrderProductSection";
 import PointSelection from "./_components/PointSelection";
 import PaymentSelection from "./_components/PaymentSelection";
 import { useMyIntro } from "@/hooks/query/useMyInfo";
+import { useOrderStore } from "@/store/useOrderStore";
 
 export default function OrdersPage() {
+  const router = useRouter();
+  const { resetOrderStore } = useOrderStore();
+
   // store
-  // const { isOrderFlowActive, setOrderFlowActive } = useOrderItemStore();
-  const { setOrderFlowActive } = useOrderItemStore();
+  const { isOrderFlowActive, setOrderFlowActive } = useOrderItemStore();
+  // const { setOrderFlowActive } = useOrderItemStore();
 
   // api 훅
   const { data: myInfo, isLoading, isError } = useMyIntro();
@@ -29,13 +33,17 @@ export default function OrdersPage() {
 
     // 주문페이지를 벗어날 때
     return () => {
+      resetOrderStore();
       setOrderFlowActive(false);
     };
-  }, [setOrderFlowActive]);
+  }, [setOrderFlowActive, resetOrderStore]);
 
-  // if (!isOrderFlowActive) {
-  //   notFound();
-  // }
+  if (!isOrderFlowActive) {
+    // alert("주문페이지는 실제 상품 선택 후 들어올 수 있습니다.");
+    // notFound();
+    router.push("/");
+    return;
+  }
 
   if (isLoading) {
     return <div className="text-center text-gray-400 py-8">로딩 중...</div>;

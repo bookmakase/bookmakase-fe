@@ -6,8 +6,16 @@ import { usePostOrder } from "@/hooks/mutation/useOrder";
 
 export default function OrderSummary() {
   // store
-  const { deliveryPrice, usedPoint, earningPoint, totalPrice } =
-    useOrderStore();
+  const {
+    deliveryPrice,
+    usedPoint,
+    earningPoint,
+    totalPrice,
+    totalQuantity,
+    paymentMethod,
+    orderAddress,
+    orderItems,
+  } = useOrderStore();
   const paymentAmount = totalPrice + deliveryPrice - usedPoint;
 
   // 주문 요청 훅
@@ -36,7 +44,7 @@ export default function OrderSummary() {
         </div>
         <div className="flex justify-between text-xs text-gray-500">
           <span>적립 예정포인트</span>
-          <span>{earningPoint}P</span>
+          <span>{earningPoint.toLocaleString()}P</span>
         </div>
       </div>
       <Button
@@ -44,7 +52,18 @@ export default function OrderSummary() {
         color="main"
         size="md"
         className="w-full mt-4"
-        onClick={() => postOrderMutate()}
+        onClick={() =>
+          postOrderMutate({
+            totalPrice,
+            totalQuantity,
+            paymentMethod,
+            orderAddress,
+            usedPoint,
+            earningPoint,
+            deliveryPrice,
+            orderItems,
+          })
+        }
       >
         결제하기
       </Button>
