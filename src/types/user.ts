@@ -14,3 +14,10 @@ export interface MyInfo {
   adress: string;
   point: number;
 }
+
+export interface userInformationUpdate {
+  currentPassword?: string;
+  newPassword?: string;
+  confirmNewPassword?: string;
+  newUsername?: string;
+}

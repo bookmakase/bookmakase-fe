@@ -37,3 +37,13 @@ export const userInformationUpdate = async (data: userInformationUpdate) => {
     throw error;
   }
 };
+
+export const getUserInfo = async () => {
+  try {
+    const response = await instance.get(`${api.users}/me`);
+    return response.data;
+  } catch (e) {
+    console.error("내 정보 조회 실패 : ", e);
+    throw e;
+  }
+};
