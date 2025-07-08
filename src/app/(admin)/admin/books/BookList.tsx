@@ -6,7 +6,7 @@ import { fetchBooks } from '@/api/admin';
 import Button from '@/components/ui/Button';
 import type { PageInfo } from '@/types/pagination';
 import type { BookItem } from '@/types/book';
-import { createRecommendation, deleteRecommendation } from '@/api/admin';
+import { createRecommendation } from '@/api/admin';
 
 
 export default function BookList() {
