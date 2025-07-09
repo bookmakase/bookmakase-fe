@@ -40,16 +40,12 @@ export default function CartListPage() {
     <div className="w-full min-h-[calc(100vh-120px)] flex justify-center items-center px-2 py-10">
       <MyPageNav />
       <div className="min-h-[calc(100vh-200px)] flex-1/3  flex flex-col px-12 py-10 gap-4">
-        <h1 className="text-3xl font-bold mb-6">🛒 장바구니</h1>
+        <h1 className="text-3xl font-bold ">🛒 장바구니</h1>
 
         {/* 🛒 장바구니 상품 리스트 */}
         <div className="space-y-4 mb-6">
           {cartBooks.map((book) => (
-            <CartItem
-              key={book.id}
-              book={book}
-              onQuantityChange={handleQuantityChange}
-            />
+            <CartItem book={book} onQuantityChange={handleQuantityChange} />
           ))}
         </div>
 
