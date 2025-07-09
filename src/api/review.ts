@@ -1,5 +1,5 @@
 import { api } from "@/constants/apiPath";
-import { Review, ReviewFilter } from "@/types/review";
+import { Review, ReviewFilter, ReviewCreateReqProps } from "@/types/review";
 import { instance } from "@/lib/axios";
 
 interface ReviewPageResponse {
@@ -41,6 +41,21 @@ export const fetchReviews = async (
   } catch (e) {
     console.error("리뷰 목록 조회 실패", e);
     return null;
+  }
+};
+
+export const postReview = async (reviewData: ReviewCreateReqProps) => {
+  console.log("데이터를 보자", reviewData);
+  try {
+    const response = await instance.post(
+      `${api.reviews.create(reviewData.bookId)}`,
+      reviewData.reviewReq
+    );
+
+    return response.data;
+  } catch (e) {
+    console.error("리뷰 작성 실패", e);
+    return e;
   }
 };
 

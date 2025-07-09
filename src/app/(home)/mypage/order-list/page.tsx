@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 import MyPageNav from "../_components/MyPageNav";
 import Button from "@/components/ui/Button";
-import Image from "next/image";
 import { useMyOrderList } from "@/hooks/query/useMyOrderList";
 import { OrderItemResponse, OrderResponse } from "@/api/order";
 import { useRouter } from "next/navigation";
+import MyPageOrderItem from "./_components/MyPageOrderItem";
 
 const isArrived = (dateStr?: string | null) => {
   if (!dateStr) return false;
@@ -26,6 +26,8 @@ export default function OrderListPage() {
   const router = useRouter();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3; // 한 페이지당 보여질 아이템 개수
+  // const [rating, setRating] = useState("0");
+  // const [content, setContent] = useState("");
 
   const { data, isPending, isError } = useMyOrderList(
     currentPage,
@@ -103,53 +105,15 @@ export default function OrderListPage() {
               </div>
 
               {/* 주문 디테일 정보 콘텐츠 */}
-              {order.orderItems.map((book: OrderItemResponse) => {
-                const arrived = isArrived(order.expectedArrivalDate);
-                const statusLabel = arrived ? "배송완료" : book.orderStatus;
-                const dateLabel = arrived ? "도착 완료" : "도착 예정일";
-
-                return (
-                  <div
-                    key={book.bookId}
-                    className="flex justify-between items-center w-full px-10 py-5 border rounded-md"
-                  >
-                    <div className="flex flex-col gap-2 cursor-pointer">
-                      <div className="flex gap-1 items-end">
-                        <p className="font-bold">{statusLabel}</p>
-                        <small className="text-main">
-                          {order.expectedArrivalDate?.slice(0, 10)} {dateLabel}
-                        </small>
-                      </div>
-
-                      <div
-                        className="flex justify-center items-center gap-4"
-                        onClick={() => handleClickBookDetailMove(book.bookId)}
-                      >
-                        <div className="w-[160px] h-[160px] overflow-hidden border shadow relative">
-                          <Image
-                            alt={`${book.thumbnail}`}
-                            src={book.thumbnail ?? ""}
-                            fill
-                            priority
-                          />
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          <p>{book.title}</p>
-                          <p className="truncate text-sm max-w-[200px]">
-                            {book.contents}
-                          </p>
-                          <div className="flex gap-2 text-gray-400">
-                            <small>{book.salePrice}원</small>
-                            <small>{book.orderQuantity}개</small>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <Button size="md">리뷰 작성하기</Button>
-                  </div>
-                );
-              })}
+              {order.orderItems.map((book: OrderItemResponse) => (
+                <MyPageOrderItem
+                  key={book.bookId}
+                  book={book}
+                  isArrived={isArrived}
+                  order={order}
+                  handleClickBookDetailMove={handleClickBookDetailMove}
+                />
+              ))}
             </section>
           ))}
 

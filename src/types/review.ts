@@ -13,3 +13,13 @@ export enum ReviewFilter {
   Latest = "latest",
   MyReview = "myReview",
 }
+
+export interface ReviewCreateReqProps {
+  bookId: number;
+  reviewReq: ReviewCreateReq;
+}
+
+export interface ReviewCreateReq {
+  rating: number;
+  content: string;
+}

@@ -48,3 +48,13 @@ export const getUserInfo = async () => {
     throw e;
   }
 };
+
+export const patchAddress = async (address: string) => {
+  try {
+    const response = await instance.patch(`${api.users}/address`, { address });
+    return response.data;
+  } catch (e) {
+    console.error("주소 변경경 실패 : ", e);
+    throw e;
+  }
+};
