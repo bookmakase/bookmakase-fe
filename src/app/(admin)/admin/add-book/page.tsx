@@ -32,6 +32,12 @@ export default function AddBookPage() {
     };
 
     const handleSubmit = async () => {
+        // 🔒 유효성 검사 추가
+        if (form.title.trim() === '' || form.count.trim() === '') {
+            setError('제목과 재고 수량은 필수 입력 항목입니다.');
+            return;
+        }
+
         try {
             const offsetPublishedAt =
                 form.publishedAt.trim() !== ''
@@ -55,8 +61,6 @@ export default function AddBookPage() {
             setError(message);
         }
     };
-
-
 
 
     const fields = [
