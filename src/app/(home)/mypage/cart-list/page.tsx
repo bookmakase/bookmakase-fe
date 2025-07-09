@@ -45,7 +45,11 @@ export default function CartListPage() {
         {/* 🛒 장바구니 상품 리스트 */}
         <div className="space-y-4 mb-6">
           {cartBooks.map((book) => (
-            <CartItem book={book} onQuantityChange={handleQuantityChange} />
+            <CartItem
+              key={book.id}
+              book={book}
+              onQuantityChange={handleQuantityChange}
+            />
           ))}
         </div>
 
