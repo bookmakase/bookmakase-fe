@@ -1,5 +1,23 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteAndRestoration } from "@/api/review";
+import { deleteAndRestoration, postReview } from "@/api/review";
+import type { ReviewCreateReqProps } from "@/types/review";
+import { useRouter } from "next/navigation";
+
+export const usePostReview = () => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (reviewData: ReviewCreateReqProps) => postReview(reviewData),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["reviews"] });
+      alert("리뷰가 작성됐습니다.");
+      router.push(`/books/${data.bookId}`);
+    },
+    onError: (error) => {
+      console.error("리뷰 작성 실패", error);
+    },
+  });
+};
 
 export const usePatchReview = () => {
   const queryClient = useQueryClient();
