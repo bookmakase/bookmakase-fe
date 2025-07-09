@@ -3,20 +3,9 @@
 import React, { useState } from "react";
 import MyPageNav from "../_components/MyPageNav";
 import Button from "@/components/ui/Button";
-// import Image from "next/image";
 import { useMyOrderList } from "@/hooks/query/useMyOrderList";
 import { OrderItemResponse, OrderResponse } from "@/api/order";
 import { useRouter } from "next/navigation";
-// import {
-//   Dialog,
-//   DialogClose,
-//   DialogContent,
-//   DialogDescription,
-//   DialogFooter,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "@/components/ui/dialog";
 import MyPageOrderItem from "./_components/MyPageOrderItem";
 
 const isArrived = (dateStr?: string | null) => {
