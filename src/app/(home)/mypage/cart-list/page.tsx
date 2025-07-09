@@ -37,9 +37,9 @@ export default function CartListPage() {
   }
 
   return (
-    <div className="w-full min-h-[calc(100vh-120px)] flex justify-center items-start px-2 py-10 gap-6">
+    <div className="w-full min-h-[calc(100vh-120px)] flex justify-center items-center px-2 py-10">
       <MyPageNav />
-      <div className="flex-1 max-w-4xl">
+      <div className="min-h-[calc(100vh-200px)] flex-1/3  flex flex-col px-12 py-10 gap-4">
         <h1 className="text-3xl font-bold mb-6">🛒 장바구니</h1>
 
         {/* 🛒 장바구니 상품 리스트 */}
