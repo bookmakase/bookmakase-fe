@@ -78,7 +78,7 @@ export default function Home() {
               <Link
                 key={i}
                 href={`/books/${book.bookId}`}
-                className="w-[160px] border p-2 rounded-xl shadow-sm bg-white hover:shadow-md transition"
+                className="w-[160px] border p-2  shadow-sm bg-white hover:shadow-md transition"
               >
                 <li>
                   {book.thumbnail ? (
@@ -102,6 +102,10 @@ export default function Home() {
               </Link>
             ))}
           </ul>
+        )}
+        {/* 검색 결과 없을 때 메시지 */}
+        {searchResults.length === 0 && keyword.trim() !== "" && (
+            <p className="text-center text-gray-500 mt-4">일치하는 결과가 없습니다.</p> 
         )}
       </section>
 
@@ -133,7 +137,7 @@ export default function Home() {
                 <Link
                   key={i}
                   href={`/books/${book.bookId}`}
-                  className="w-[160px] border p-2 rounded-xl shadow-sm bg-white hover:shadow-md transition"
+                  className="w-[160px] border p-2  shadow-sm bg-white hover:shadow-md transition"
                 >
                   <li>
                     {book.thumbnail ? (
@@ -204,7 +208,7 @@ export default function Home() {
               <Link
                 key={i}
                 href={`/books/${book.bookId}`}
-                className="w-[160px] border p-2 rounded-xl shadow-sm bg-white hover:shadow-md transition"
+                className="w-[160px] border p-2  shadow-sm bg-white hover:shadow-md transition"
               >
                 <li>
                   {book.thumbnail ? (

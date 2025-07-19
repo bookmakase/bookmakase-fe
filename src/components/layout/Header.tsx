@@ -65,7 +65,7 @@ export default function Header() {
         {/* ② 일반 사용자 ---------------------------------- */}
         {isLogin && !isAdmin && (
           <div className="flex items-center gap-8">
-            <Link href="/orders" aria-label="주문 내역">
+            <Link href="/mypage/cart-list" aria-label="주문 내역">
               <ShoppingCartIcon className="w-6 h-6" />
             </Link>
             <Link href="/mypage" aria-label="마이 페이지">
