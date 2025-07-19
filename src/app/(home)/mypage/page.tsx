@@ -24,9 +24,6 @@ export default function MyPage() {
     if (data) setIntro(data.intro);
   }, [data]);
 
-  console.log("@#######################");
-  console.log(intro);
-
   const [isIntroEdit, setIsIntroEdit] = useState(false);
 
   const [currentPassword, setCurrentPassword] = useState("");
@@ -37,8 +34,6 @@ export default function MyPage() {
   const [isInformationEdit, setIsInformationEdit] = useState(false);
   const [isPasswordEdit, setIsPasswordEdit] = useState(false);
   const [isNickNameEdit, setIsNickNameEdit] = useState(false);
-
-  console.log("data : ", data);
 
   const { mutate: updateIntro, isPending: isIntroPending } = useIntroUpdate();
   const { mutate: updateInformation, isPending: isInformationPending } =
@@ -70,11 +65,6 @@ export default function MyPage() {
   };
 
   const handleClickInformationUpdate = () => {
-    // 이부분 작성해야해
-    // 비밀번호 바꿀 경우 기존 비밀번호 + 새 비밀번호+ 새 비밀번호 확인
-    // 유저네임을 바꿀경우 새 유저이름만
-    // 모두 다바꿀경우 모든 필드가 다있는 경우
-
     const payload: InformationPayload = {};
 
     if (isPasswordEdit) {
