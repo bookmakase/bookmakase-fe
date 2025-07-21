@@ -54,7 +54,9 @@ export default function MyPageNav() {
           <Image
             alt="프로필 이미지"
             src={
-              data.imageUrl || previewUrl || "/images/profile-image-default.jpg"
+              data?.imageUrl ||
+              previewUrl ||
+              "/images/profile-image-default.jpg"
             }
             fill
             priority
