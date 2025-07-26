@@ -5,6 +5,7 @@ import { formatDate } from "@/utils/formatDate";
 import { useMyIntro } from "@/hooks/query/useMyInfo";
 import { usePatchReview } from "@/hooks/mutation/useReview";
 import Button from "@/components/ui/Button";
+import { useAuthStore } from "@/store/auth";
 
 type ReviewProp = {
   review: Review;
@@ -20,6 +21,9 @@ export default function ReviewItem({ review }: ReviewProp) {
   // api 훅
   const { data, isLoading, isError } = useMyIntro();
   const { mutate: patchReviewMutate } = usePatchReview();
+
+  // store
+  const { isLogin } = useAuthStore();
 
   useEffect(() => {
     if (isError || data === null || data === undefined) {
@@ -53,7 +57,7 @@ export default function ReviewItem({ review }: ReviewProp) {
             </svg>
             <span>삭제된 리뷰입니다.</span>
           </div>
-          {myInfo !== null && myInfo.userId === user.userId && (
+          {isLogin && myInfo !== null && myInfo.userId === user.userId && (
             <Button
               color="main"
               variant="outline"

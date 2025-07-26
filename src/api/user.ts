@@ -80,7 +80,7 @@ export const updateProfileImage = async (
   const formData = new FormData();
   formData.append("file", file);
   try {
-    const response = await instance.post<UserProfileResponse>(
+    const response = await instance.patch<UserProfileResponse>(
       `${api.users}/profile-image`,
       formData,
       {
