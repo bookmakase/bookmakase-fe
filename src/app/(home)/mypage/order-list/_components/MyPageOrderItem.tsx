@@ -93,18 +93,28 @@ export default function MyPageOrderItem({
                 />
               </div>
             </div>
-            <DialogDescription>리뷰를 작성해주세요.</DialogDescription>
+            <label
+              htmlFor="review"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mt-4"
+            >
+              리뷰를 작성해주세요.
+            </label>
             <div className="flex items-center gap-2">
               <div className="grid flex-1 gap-2">
-                <label htmlFor="review" className="sr-only">
-                  Link
-                </label>
                 {/* <input id="review" value={content} onChange={(e) => setContent(e.target.value)} /> */}
                 <textarea
                   id="review"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   rows={5}
+                  className="
+                    border
+                    border-gray-300
+                    focus:border-blue-500
+                    focus:ring-blue-500
+                    rounded-md
+                    p-2
+                  "
                 />
               </div>
             </div>
