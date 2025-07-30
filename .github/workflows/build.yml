@@ -10,12 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Node.js 18 설치
+        uses: actions/setup-node@v4
         with:
           node-version: 18
 
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run build
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: 린트 검사
+        run: npm run lint
+
+      - name: 프로젝트 빌드
+        run: npm run build

@@ -10,30 +10,37 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: 코드 체크아웃
+        uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
         with:
           node-version: 18
-      - run: npm ci
-      - run: npm run build
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: 프로젝트 빌드
+        run: npm run build
 
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: 코드 체크아웃
         uses: actions/checkout@v4
 
-      - name: Install Vercel CLI
+      - name: Vercel CLI 설치
         run: npm install -g vercel
 
-      - name: Remove .vercel directory
+      - name: .vercel 디렉터리 삭제
         run: rm -rf .vercel
 
-      - name: Prepare project settings
+      - name: 프로젝트 설정 준비
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
 
-      - name: Deploy to Vercel
+      - name: Vercel에 배포
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
