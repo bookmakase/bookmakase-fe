@@ -31,7 +31,8 @@ jobs:
         run: rm -rf .vercel
 
       - name: Link Vercel Project
-        run: vercel link --project ${{ secrets.VERCEL_PROJECT_ID }} --org ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_TOKEN }}
+        run: vercel link --project ${{ secrets.VERCEL_PROJECT_ID }} --scope ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_TOKEN }}
+
 
       - name: Deploy to Vercel
         env:
