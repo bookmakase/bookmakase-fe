@@ -1,4 +1,4 @@
-name: Build on PR
+name: PR 빌드 점검
 
 on:
   pull_request:
