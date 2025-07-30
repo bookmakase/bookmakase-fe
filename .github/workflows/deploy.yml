@@ -21,14 +21,21 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: npm install -g vercel
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Remove .vercel directory
+        run: rm -rf .vercel
+
+      - name: Link Vercel Project
+        run: vercel link --project ${{ secrets.VERCEL_PROJECT_ID }} --org ${{ secrets.VERCEL_ORG_ID }} --token ${{ secrets.VERCEL_TOKEN }}
+
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
         run: |
           vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-          vercel deploy --prod --token=$VERCEL_TOKEN --confirm --scope $VERCEL_ORG_ID
-
+          vercel deploy --prod --token=$VERCEL_TOKEN --confirm
