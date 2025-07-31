@@ -114,7 +114,7 @@ export default function Home() {
           {/* ✅ 제목: 왼쪽 정렬 + 카드 위에 위치 */}
           <div className="w-full mb-4">
             <h2 className="text-xl font-bold text-left ml-[60px]">
-              에디터의 북마카세🍣 테스트 입니다 ~~~
+              에디터의 북마카세🍣
             </h2>
           </div>
 
