@@ -19,6 +19,11 @@ export interface ReviewCreateReqProps {
   reviewReq: ReviewCreateReq;
 }
 
+export interface ReviewUpdateReqProps {
+  reviewId: number;
+  reviewReq: ReviewCreateReq;
+}
+
 export interface ReviewCreateReq {
   rating: number;
   content: string;
