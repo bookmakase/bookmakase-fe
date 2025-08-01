@@ -1,6 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteAndRestoration, postReview } from "@/api/review";
-import type { ReviewCreateReqProps } from "@/types/review";
+import { deleteAndRestoration, postReview, putReview } from "@/api/review";
+import type {
+  ReviewCreateReqProps,
+  ReviewUpdateReqProps,
+} from "@/types/review";
 import { useRouter } from "next/navigation";
 
 export const usePostReview = () => {
@@ -15,6 +18,20 @@ export const usePostReview = () => {
     },
     onError: (error) => {
       console.error("리뷰 작성 실패", error);
+    },
+  });
+};
+
+export const usePutReview = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (reviewData: ReviewUpdateReqProps) => putReview(reviewData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["reviews"] });
+      alert("리뷰가 수정됐습니다.");
+    },
+    onError: (error) => {
+      console.error("리뷰 수정 실패", error);
     },
   });
 };

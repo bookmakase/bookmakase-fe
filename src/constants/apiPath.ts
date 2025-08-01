@@ -22,6 +22,7 @@ export const api = {
   reviews: {
     list: (bookId: string | number) => `/api/v1/books/${bookId}/reviews`,
     create: (bookId: string | number) => `/api/v1/books/${bookId}/reviews`,
+    update: (reviewId: string | number) => `/api/v1/reviews/${reviewId}`,
     deleteAndRestoration: (reviewId: string | number) =>
       `/api/v1/reviews/${reviewId}`,
   },

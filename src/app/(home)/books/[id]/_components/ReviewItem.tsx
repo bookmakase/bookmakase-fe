@@ -3,9 +3,19 @@ import type { MyInfo } from "@/types/user";
 import { useState, useEffect } from "react";
 import { formatDate } from "@/utils/formatDate";
 import { useMyIntro } from "@/hooks/query/useMyInfo";
-import { usePatchReview } from "@/hooks/mutation/useReview";
+import { usePatchReview, usePutReview } from "@/hooks/mutation/useReview";
 import Button from "@/components/ui/Button";
 import { useAuthStore } from "@/store/auth";
+import StarRating from "@/components/ui/StarRating";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 type ReviewProp = {
   review: Review;
@@ -17,10 +27,13 @@ export default function ReviewItem({ review }: ReviewProp) {
 
   // 변수
   const [myInfo, setMyInfo] = useState<MyInfo | null>(null);
+  const [newRating, setNewRating] = useState(rating);
+  const [newContent, setNewContent] = useState(content);
 
   // api 훅
   const { data, isLoading, isError } = useMyIntro();
   const { mutate: patchReviewMutate } = usePatchReview();
+  const { mutate: putReviewMutate } = usePutReview();
 
   // store
   const { isLogin } = useAuthStore();
@@ -78,17 +91,88 @@ export default function ReviewItem({ review }: ReviewProp) {
                 {formatDate(updatedAt)}
               </span>
               <span className="flex items-center gap-1 text-yellow-400 text-base font-bold">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <span key={i}>{i < rating ? "★" : "☆"}</span>
-                ))}
+                <StarRating
+                  initialRating={rating}
+                  className="scale-75"
+                  isReadOnly={true}
+                />
                 <span className="ml-1 text-gray-500 text-xs">({rating})</span>
               </span>
             </div>
             {myInfo !== null && myInfo.userId === user.userId && (
               <div className="flex items-center gap-1">
-                <button className="text-xs text-gray-400 hover:text-main px-2 py-1 rounded transition cursor-pointer">
-                  수정
-                </button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button className="text-xs text-gray-400 hover:text-main px-2 py-1 rounded transition cursor-pointer">
+                      수정
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>리뷰 수정</DialogTitle>
+                      {/* 평점 입력 영역 */}
+                      <label
+                        htmlFor="star-rating"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mt-4"
+                      >
+                        평점을 입력해주세요.
+                      </label>
+                      <div id="star-rating" className="flex items-center gap-2">
+                        <StarRating
+                          initialRating={newRating}
+                          onChange={setNewRating}
+                        />
+                        <span className="text-lg font-semibold">
+                          {newRating} / 10
+                        </span>
+                      </div>
+                      <label
+                        htmlFor="review"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mt-4"
+                      >
+                        리뷰를 작성해주세요.
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <div className="grid flex-1 gap-2">
+                          <textarea
+                            id="review"
+                            value={newContent}
+                            onChange={(e) => setNewContent(e.target.value)}
+                            rows={5}
+                            className="
+                              border
+                              border-gray-300
+                              focus:border-blue-500
+                              focus:ring-blue-500
+                              rounded-md
+                              p-2
+                            "
+                          />
+                        </div>
+                      </div>
+                    </DialogHeader>
+                    <DialogFooter className="sm:justify-start">
+                      <DialogClose asChild>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          color="main"
+                          onClick={() =>
+                            putReviewMutate({
+                              reviewId,
+                              reviewReq: {
+                                rating: parseInt(newRating.toString()),
+                                content: newContent,
+                              },
+                            })
+                          }
+                        >
+                          수정하기
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
                 <button
                   className="text-xs text-gray-400 hover:text-red-500 px-2 py-1 rounded transition cursor-pointer"
                   onClick={() => patchReviewMutate(reviewId)}
