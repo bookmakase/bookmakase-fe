@@ -5,6 +5,7 @@ import { formatDate } from "@/utils/formatDate";
 import { useMyIntro } from "@/hooks/query/useMyInfo";
 import { usePatchReview, usePutReview } from "@/hooks/mutation/useReview";
 import Button from "@/components/ui/Button";
+import { useAuthStore } from "@/store/auth";
 import StarRating from "@/components/ui/StarRating";
 import {
   Dialog,
@@ -33,6 +34,9 @@ export default function ReviewItem({ review }: ReviewProp) {
   const { data, isLoading, isError } = useMyIntro();
   const { mutate: patchReviewMutate } = usePatchReview();
   const { mutate: putReviewMutate } = usePutReview();
+
+  // store
+  const { isLogin } = useAuthStore();
 
   useEffect(() => {
     if (isError || data === null || data === undefined) {
@@ -66,7 +70,7 @@ export default function ReviewItem({ review }: ReviewProp) {
             </svg>
             <span>삭제된 리뷰입니다.</span>
           </div>
-          {myInfo !== null && myInfo.userId === user.userId && (
+          {isLogin && myInfo !== null && myInfo.userId === user.userId && (
             <Button
               color="main"
               variant="outline"
