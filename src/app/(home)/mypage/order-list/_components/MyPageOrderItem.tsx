@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -15,6 +14,7 @@ import {
 import Button from "@/components/ui/Button";
 import type { OrderItemResponse, OrderResponse } from "@/api/order";
 import { usePostReview } from "@/hooks/mutation/useReview";
+import StarRating from "@/components/ui/StarRating";
 
 export default function MyPageOrderItem({
   book,
@@ -31,7 +31,7 @@ export default function MyPageOrderItem({
   const statusLabel = arrived ? "배송완료" : book.orderStatus;
   const dateLabel = arrived ? "도착 완료" : "도착 예정일";
 
-  const [rating, setRating] = useState("0");
+  const [rating, setRating] = useState(0);
   const [content, setContent] = useState("");
 
   // api 훅
@@ -80,31 +80,38 @@ export default function MyPageOrderItem({
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>리뷰 작성</DialogTitle>
-            <DialogDescription>평점을 입력해주세요.</DialogDescription>
-            <div className="flex items-center gap-2">
-              <div className="grid flex-1 gap-2">
-                <label htmlFor="rating" className="sr-only">
-                  Link
-                </label>
-                <input
-                  id="rating"
-                  value={rating}
-                  onChange={(e) => setRating(e.target.value)}
-                />
-              </div>
+            {/* 평점 입력 영역 */}
+            <label
+              htmlFor="star-rating"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mt-4"
+            >
+              평점을 입력해주세요.
+            </label>
+            <div id="star-rating" className="flex items-center gap-2">
+              <StarRating initialRating={rating} onChange={setRating} />
+              <span className="text-lg font-semibold">{rating} / 10</span>
             </div>
-            <DialogDescription>리뷰를 작성해주세요.</DialogDescription>
+            <label
+              htmlFor="review"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mt-4"
+            >
+              리뷰를 작성해주세요.
+            </label>
             <div className="flex items-center gap-2">
               <div className="grid flex-1 gap-2">
-                <label htmlFor="review" className="sr-only">
-                  Link
-                </label>
-                {/* <input id="review" value={content} onChange={(e) => setContent(e.target.value)} /> */}
                 <textarea
                   id="review"
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   rows={5}
+                  className="
+                    border
+                    border-gray-300
+                    focus:border-blue-500
+                    focus:ring-blue-500
+                    rounded-md
+                    p-2
+                  "
                 />
               </div>
             </div>
@@ -119,7 +126,7 @@ export default function MyPageOrderItem({
                   postReviewMutate({
                     bookId: book.bookId,
                     reviewReq: {
-                      rating: parseInt(rating),
+                      rating: parseInt(rating.toString()),
                       content,
                     },
                   })
