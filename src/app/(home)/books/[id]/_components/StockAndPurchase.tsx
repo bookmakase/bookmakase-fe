@@ -63,7 +63,7 @@ export default function StockAndPurchase({
     return <div className="text-center text-gray-400 py-8">로딩 중...</div>;
   }
 
-  if (!isLogin || isError || myInfo === undefined || myInfo === null) {
+  if (isError) {
     return (
       <div className="text-center text-red-400 py-8">
         주문자 정보가 정확하지 않습니다.
